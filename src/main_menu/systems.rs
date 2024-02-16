@@ -1,6 +1,11 @@
 use bevy::prelude::*;
 
-use crate::{styles::*, components::{Screen, BasicButtonBundle, ButtonTextBundle, SettingsButton, QuitButton}, systems::despawn_screens};
+use crate::{
+    components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen, SettingsButton},
+    styles::*,
+    systems::despawn_screens,
+    AppState,
+};
 
 use super::components::{MainMenu, PlayButton};
 
@@ -11,12 +16,14 @@ pub fn interact_with_play_button(
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<PlayButton>),
     >,
+    mut state: ResMut<NextState<AppState>>,
 ) {
     if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
         match *interaction {
             Interaction::Pressed => {
                 *background_color = PRESSED_BUTTON_COLOR.into();
                 despawn_screens(commands, screen_q);
+                state.set(AppState::Game);
             }
 
             Interaction::Hovered => {
@@ -62,7 +69,7 @@ pub fn build_main_menu(commands: &mut Commands, asset_server: &Res<AssetServer>)
                     parent.spawn(TextBundle {
                         text: Text {
                             sections: vec![TextSection::new(
-                                "Tower Kinesis",
+                                "Millipede Railgun",
                                 get_title_text_styles(&asset_server),
                             )],
                             ..default()

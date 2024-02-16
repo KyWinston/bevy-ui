@@ -51,7 +51,7 @@ pub fn interact_with_settings_button(
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<SettingsButton>),
     >,
-    mut settings_state: ResMut<NextState<AppState>>,
+    // mut settings_state: ResMut<NextState<AppState>>,
 ) {
     if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
         match *interaction {
