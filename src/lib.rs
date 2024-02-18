@@ -31,8 +31,8 @@ impl Plugin for UiScreensPlugin {
             DeathScreenPlugin,
             // VictoryScreenPlugin,
         ))
-        .add_state::<SimulationState>()
-        .add_state::<AppState>()
+        .insert_state::<SimulationState>(SimulationState::Running)
+        .insert_state::<AppState>(AppState::MainMenu)
         .add_systems(
             Update,
             (interact_with_quit_button, interact_with_settings_button),
