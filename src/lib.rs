@@ -31,8 +31,8 @@ impl Plugin for UiScreensPlugin {
             DeathScreenPlugin,
             // VictoryScreenPlugin,
         ))
-        .insert_state::<SimulationState>(SimulationState::Running)
-        .insert_state::<AppState>(AppState::MainMenu)
+        .init_state::<SimulationState>()
+        .init_state::<AppState>()
         .add_systems(
             Update,
             (interact_with_quit_button, interact_with_settings_button),
@@ -46,7 +46,7 @@ pub enum AppState {
     MainMenu,
     Loading,
     Game,
-    Editor
+    Editor,
 }
 
 #[derive(Default, States, Debug, Hash, Eq, PartialEq, Clone)]
