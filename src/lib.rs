@@ -45,8 +45,8 @@ pub enum AppState {
     #[default]
     MainMenu,
     Loading,
-    Game,
     Editor,
+    Game,
 }
 
 #[derive(Default, States, Debug, Hash, Eq, PartialEq, Clone)]
@@ -54,5 +54,5 @@ pub enum SimulationState {
     #[default]
     Running,
     Paused,
-    Dead,
+    Dead
 }

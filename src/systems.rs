@@ -116,3 +116,7 @@ pub fn despawn_screens(mut commands: Commands, mut screen_q: Query<Entity, With<
         commands.entity(ent).despawn_recursive();
     }
 }
+
+pub fn switch_to_menu(mut state: ResMut<NextState<AppState>>){
+    state.set(AppState::MainMenu);
+}
