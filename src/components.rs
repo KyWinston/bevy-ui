@@ -45,7 +45,7 @@ impl ButtonTextBundle {
                         text,
                         get_button_text_styles(&asset_server),
                     )],
-                    alignment: TextAlignment::Center,
+                    justify: JustifyText::Center,
                     ..default()
                 },
                 ..default()

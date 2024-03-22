@@ -23,7 +23,7 @@ pub fn interact_with_play_button(
             Interaction::Pressed => {
                 *background_color = PRESSED_BUTTON_COLOR.into();
                 despawn_screens(commands, screen_q);
-                state.set(AppState::Game);
+                state.set(AppState::Loading);
             }
 
             Interaction::Hovered => {
