@@ -7,7 +7,6 @@ repository = "https://github.com/KyleWinston/bevy-ui"
 license = "MIT OR Apache-2.0"
 edition = "2021"
 keywords = ["bevy", "menus","ui"]
-publish = ["bevy-basic-ui"]
 
 [dependencies]
 bevy = "^0.13"
