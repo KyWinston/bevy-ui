@@ -11,13 +11,10 @@ keywords = ["bevy", "menus", "ui"]
 [dependencies]
 bevy = { version = "^0.13", default-features = false, features = [
     "bevy_asset",
-    "bevy_scene",
     "bevy_winit",
     "bevy_core_pipeline",
-    "bevy_pbr",
     "bevy_text",
     "bevy_ui",
-    "multi-threaded",
     "png",
     "vorbis",
     "x11",
