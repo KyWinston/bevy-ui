@@ -7,7 +7,7 @@ use crate::{
     AppState,
 };
 
-use super::components::{MainMenu, PlayButton};
+use super::{components::{MainMenu, PlayButton}, events::StartLoad};
 
 pub fn interact_with_play_button(
     commands: Commands,
@@ -16,14 +16,14 @@ pub fn interact_with_play_button(
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<PlayButton>),
     >,
-    mut state: ResMut<NextState<AppState>>,
+    mut load: EventWriter<StartLoad>
 ) {
     if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
         match *interaction {
             Interaction::Pressed => {
                 *background_color = PRESSED_BUTTON_COLOR.into();
                 despawn_screens(commands, screen_q);
-                state.set(AppState::Loading);
+                load.send(StartLoad);
             }
 
             Interaction::Hovered => {
