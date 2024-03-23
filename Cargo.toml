@@ -20,6 +20,7 @@ bevy = { version = "^0.13", default-features = false, features = [
     "x11",
     "default_font",
 ] }
+bevy-ui-dsl = "0.8.0"
 
 # Enable only a small amount of optimization in debug mode
 [profile.dev]

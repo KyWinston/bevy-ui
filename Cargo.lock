@@ -300,9 +300,24 @@ dependencies = [
 
 [[package]]
 name = "bevy-basic-ui"
-version = "0.3.6"
+version = "0.3.7"
 dependencies = [
  "bevy",
+ "bevy-ui-dsl",
+]
+
+[[package]]
+name = "bevy-ui-dsl"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b5c5af185897bef61a620b60e755e1ca9af7c12d3cfafa78cb11e29e1d9b4c1e"
+dependencies = [
+ "bevy_asset",
+ "bevy_ecs",
+ "bevy_hierarchy",
+ "bevy_render",
+ "bevy_text",
+ "bevy_ui",
 ]
 
 [[package]]

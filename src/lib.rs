@@ -25,21 +25,19 @@ pub struct UiScreensPlugin;
 
 impl Plugin for UiScreensPlugin {
     fn build(&self, app: &mut App) {
-        app.init_state::<SimulationState>()
-            .insert_state::<AppState>(AppState::Splash)
-            .add_plugins((
-                MainMenuPlugin,
-                PausePlugin,
-                // SettingsPlugin,
-                SplashPlugin,
-                LoadingPlugin,
-                DeathScreenPlugin,
-                // VictoryScreenPlugin,
-            ))
-            .add_systems(
-                Update,
-                (interact_with_quit_button, interact_with_settings_button),
-            );
+        app.add_plugins((
+            MainMenuPlugin,
+            PausePlugin,
+            // SettingsPlugin,
+            SplashPlugin,
+            LoadingPlugin,
+            DeathScreenPlugin,
+            // VictoryScreenPlugin,
+        ))
+        .add_systems(
+            Update,
+            (interact_with_quit_button, interact_with_settings_button),
+        );
     }
 }
 
