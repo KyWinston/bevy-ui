@@ -53,3 +53,30 @@ impl ButtonTextBundle {
         }
     }
 }
+
+#[derive(Component)]
+enum MenuButtonAction {
+    Play,
+    Settings,
+    SettingsDisplay,
+    SettingsSound,
+    BackToMainMenu,
+    BackToSettings,
+    Quit,
+}
+
+// Tag component used to tag entities added on the settings menu screen
+#[derive(Component)]
+struct OnSettingsMenuScreen;
+
+// Tag component used to tag entities added on the display settings menu screen
+#[derive(Component)]
+struct OnDisplaySettingsMenuScreen;
+
+// Tag component used to tag entities added on the sound settings menu screen
+#[derive(Component)]
+struct OnSoundSettingsMenuScreen;
+
+// Tag component used to mark which setting is currently selected
+#[derive(Component)]
+struct SelectedOption;

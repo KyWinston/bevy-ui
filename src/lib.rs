@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use splash::SplashPlugin;
 
 use self::{
     death_screen::DeathScreenPlugin,
@@ -14,6 +15,7 @@ pub mod death_screen;
 pub mod loading;
 pub mod main_menu;
 pub mod pause;
+pub mod splash;
 // pub mod settings;
 pub mod styles;
 pub mod systems;
@@ -27,6 +29,7 @@ impl Plugin for UiScreensPlugin {
             MainMenuPlugin,
             PausePlugin,
             // SettingsPlugin,
+            SplashPlugin,
             LoadingPlugin,
             DeathScreenPlugin,
             // VictoryScreenPlugin,
@@ -47,6 +50,7 @@ pub enum AppState {
     Loading,
     Editor,
     Game,
+    Splash,
 }
 
 #[derive(Default, States, Debug, Hash, Eq, PartialEq, Clone)]
@@ -54,5 +58,5 @@ pub enum SimulationState {
     #[default]
     Running,
     Paused,
-    Dead
+    Dead,
 }
