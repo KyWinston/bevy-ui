@@ -4,10 +4,12 @@ use crate::{
     components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen, SettingsButton},
     styles::*,
     systems::despawn_screens,
-    AppState,
 };
 
-use super::{components::{MainMenu, PlayButton}, events::StartLoad};
+use super::{
+    components::{MainMenu, PlayButton},
+    events::StartLoad,
+};
 
 pub fn interact_with_play_button(
     commands: Commands,
@@ -16,7 +18,7 @@ pub fn interact_with_play_button(
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<PlayButton>),
     >,
-    mut load: EventWriter<StartLoad>
+    mut load: EventWriter<StartLoad>,
 ) {
     if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
         match *interaction {
