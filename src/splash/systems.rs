@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::AppState;
+use crate::{components::Screen, AppState};
 
 use super::components::{SplashScreen, SplashTimer};
 
@@ -20,6 +20,7 @@ pub fn build_splash(mut commands: Commands, asset_server: Res<AssetServer>) {
                 ..default()
             },
             SplashScreen,
+            Screen
         ))
         .with_children(|parent| {
             parent.spawn(ImageBundle {
@@ -33,7 +34,7 @@ pub fn build_splash(mut commands: Commands, asset_server: Res<AssetServer>) {
             });
         });
     // Insert the timer as a resource
-    commands.insert_resource(SplashTimer(Timer::from_seconds(1.0, TimerMode::Once)));
+    commands.insert_resource(SplashTimer(Timer::from_seconds(4.0, TimerMode::Once)));
 }
 
 // Tick the timer, and change state when finished
