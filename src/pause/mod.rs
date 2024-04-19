@@ -3,8 +3,7 @@ use bevy::prelude::*;
 pub mod components;
 mod systems;
 
-
-use crate::{SimulationState, AppState};
+use crate::SimulationState;
 
 use self::systems::{interact_with_resume_button, spawn_pause};
 
@@ -15,7 +14,7 @@ impl Plugin for PausePlugin {
         app.add_systems(OnEnter(SimulationState::Paused), spawn_pause)
             .add_systems(
                 Update,
-                interact_with_resume_button.run_if(in_state(AppState::Game)),
+                interact_with_resume_button.run_if(in_state(SimulationState::Paused)),
             );
     }
 }

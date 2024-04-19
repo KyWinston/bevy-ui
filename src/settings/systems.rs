@@ -1,11 +1,8 @@
 use bevy::prelude::*;
 
 use crate::{
-    ui::components::QuitButton,
-    ui::{
-        components::{BasicButtonBundle, ButtonTextBundle},
-        styles::*,
-    },
+    components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen},
+    styles::{get_title_text_styles, CENTRAL_PANEL_STYLES, IMAGE_STYLE, TITLE_STYLE},
 };
 
 use super::{
@@ -15,30 +12,18 @@ use super::{
 };
 
 pub fn spawn_settings(mut commands: Commands, asset_server: Res<AssetServer>) {
-    build_pause(&mut commands, &asset_server);
+    build_settings(&mut commands, &asset_server);
 }
 
-pub fn fetch_settings(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.insert_resource(NetworkSettingsHandle(
-        asset_server.load("network.settings.toml"),
-    ));
-}
-
-// pub fn despawn_settings(mut commands: Commands, settings_q: Query<Entity, With<SettingsUi>>) {
-//     if let Ok(settings_entity) = settings_q.get_single() {
-//         commands.entity(settings_entity).despawn_recursive();
-//     }
-// }
-
-pub fn build_pause(commands: &mut Commands, asset_server: &Res<AssetServer>) -> Entity {
+pub fn build_settings(commands: &mut Commands, asset_server: &Res<AssetServer>) -> Entity {
     let settings_entity = commands
         .spawn((
             NodeBundle {
                 style: CENTRAL_PANEL_STYLES,
-                visibility: Visibility::Hidden,
                 ..default()
             },
             SettingsUi,
+            Screen
         ))
         .with_children(|parent| {
             //====title

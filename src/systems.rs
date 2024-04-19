@@ -1,6 +1,6 @@
 use bevy::{app::AppExit, prelude::*};
 
-use crate::AppState;
+use crate::UiState;
 
 use super::{
     components::{QuitButton, Screen, SettingsButton},
@@ -13,9 +13,9 @@ pub fn interact_with_quit_button(
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<QuitButton>),
     >,
-    state: Res<State<AppState>>,
+    state: Res<State<UiState>>,
     screen_q: Query<Entity, With<Screen>>,
-    mut next_state: ResMut<NextState<AppState>>,
+    mut next_state: ResMut<NextState<UiState>>,
     mut app_exit_event_writer: EventWriter<AppExit>,
 ) {
     if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
@@ -24,15 +24,15 @@ pub fn interact_with_quit_button(
                 *background_color = PRESSED_BUTTON_COLOR.into();
                 despawn_screens(commands, screen_q);
                 match state.get() {
-                    AppState::Game => {
-                        next_state.set(AppState::MainMenu);
+                    UiState::Hud => {
+                        next_state.set(UiState::MainMenu);
                     }
-                    AppState::MainMenu => {
+                    UiState::MainMenu => {
                         app_exit_event_writer.send(AppExit);
                     }
-                    // AppState::Settings => {
-                    //     next_state.set(AppState::MainMenu);
-                    // }
+                    UiState::Settings => {
+                        next_state.set(UiState::MainMenu);
+                    }
                     _ => (),
                 }
             }
@@ -51,13 +51,13 @@ pub fn interact_with_settings_button(
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<SettingsButton>),
     >,
-    // mut settings_state: ResMut<NextState<AppState>>,
+    mut settings_state: ResMut<NextState<UiState>>,
 ) {
     if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
         match *interaction {
             Interaction::Pressed => {
                 *background_color = PRESSED_BUTTON_COLOR.into();
-                // settings_state.set(AppState::Settings);
+                settings_state.set(UiState::Settings);
             }
             Interaction::Hovered => {
                 *background_color = HOVERED_BUTTON_COLOR.into();
@@ -117,6 +117,6 @@ pub fn despawn_screens(mut commands: Commands, mut screen_q: Query<Entity, With<
     }
 }
 
-pub fn switch_to_menu(mut state: ResMut<NextState<AppState>>){
-    state.set(AppState::MainMenu);
+pub fn switch_to_menu(mut state: ResMut<NextState<UiState>>) {
+    state.set(UiState::MainMenu);
 }

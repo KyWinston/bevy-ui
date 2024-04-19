@@ -1,9 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{
-    components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen, SettingsButton},
-    styles::*,
-    systems::despawn_screens,
+    components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen, SettingsButton}, resources::GameTitle, styles::*, systems::despawn_screens
 };
 
 use super::{
@@ -38,11 +36,19 @@ pub fn interact_with_play_button(
     }
 }
 
-pub fn spawn_main_menu(mut commands: Commands, asset_server: Res<AssetServer>) {
-    build_main_menu(&mut commands, &asset_server);
+pub fn spawn_main_menu(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    title: Res<GameTitle>,
+) {
+    build_main_menu(&mut commands, &asset_server, title);
 }
 
-pub fn build_main_menu(commands: &mut Commands, asset_server: &Res<AssetServer>) -> Entity {
+pub fn build_main_menu(
+    commands: &mut Commands,
+    asset_server: &Res<AssetServer>,
+    title: Res<GameTitle>,
+) -> Entity {
     let main_menu_entity = commands
         .spawn((
             NodeBundle {
@@ -71,7 +77,7 @@ pub fn build_main_menu(commands: &mut Commands, asset_server: &Res<AssetServer>)
                     parent.spawn(TextBundle {
                         text: Text {
                             sections: vec![TextSection::new(
-                                "Millipede Railgun",
+                                title.0.to_string(),
                                 get_title_text_styles(&asset_server),
                             )],
                             ..default()
@@ -95,7 +101,7 @@ pub fn build_main_menu(commands: &mut Commands, asset_server: &Res<AssetServer>)
             parent
                 .spawn((BasicButtonBundle::new(), SettingsButton))
                 .with_children(|parent| {
-                    parent.spawn(ButtonTextBundle::new("Options".to_owned(), asset_server));
+                    parent.spawn(ButtonTextBundle::new("Settings".to_owned(), asset_server));
                 });
             //====quit button
             parent

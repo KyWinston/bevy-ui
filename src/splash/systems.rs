@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{components::Screen, AppState};
+use crate::{components::Screen, UiState};
 
 use super::components::{SplashScreen, SplashTimer};
 
@@ -39,11 +39,11 @@ pub fn build_splash(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 // Tick the timer, and change state when finished
 pub fn countdown(
-    mut game_state: ResMut<NextState<AppState>>,
+    mut game_state: ResMut<NextState<UiState>>,
     time: Res<Time>,
     mut timer: ResMut<SplashTimer>,
 ) {
     if timer.tick(time.delta()).finished() {
-        game_state.set(AppState::MainMenu);
+        game_state.set(UiState::MainMenu);
     }
 }

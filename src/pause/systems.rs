@@ -1,6 +1,12 @@
 use bevy::prelude::*;
+use bevy_third_person_camera::ThirdPersonCamera;
 
-use crate::{SimulationState, components::{Screen, BasicButtonBundle, QuitButton, ButtonTextBundle}, styles::*, systems::despawn_screens};
+use crate::{
+    components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen},
+    styles::*,
+    systems::despawn_screens,
+    SimulationState,
+};
 
 use super::components::{Pause, ResumeButton};
 
@@ -30,11 +36,19 @@ pub fn interact_with_resume_button(
     }
 }
 
-pub fn spawn_pause(mut commands: Commands, asset_server: Res<AssetServer>) {
-    build_pause(&mut commands, &asset_server);
+pub fn spawn_pause(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    cam_q: Query<Entity, With<ThirdPersonCamera>>,
+) {
+    build_pause(&mut commands, &asset_server, &cam_q);
 }
 
-pub fn build_pause(commands: &mut Commands, asset_server: &Res<AssetServer>) -> Entity {
+pub fn build_pause(
+    commands: &mut Commands,
+    asset_server: &Res<AssetServer>,
+    cam_q: &Query<Entity, With<ThirdPersonCamera>>,
+) -> Entity {
     let pause_entity = commands
         .spawn((
             NodeBundle {
@@ -90,5 +104,8 @@ pub fn build_pause(commands: &mut Commands, asset_server: &Res<AssetServer>) -> 
                 });
         })
         .id();
+    if let Ok(cam) = cam_q.get_single() {
+        commands.entity(pause_entity).insert(TargetCamera(cam));
+    }
     pause_entity
 }

@@ -1,7 +1,5 @@
 use bevy::prelude::*;
 
-use crate::components::Screen;
-
 use super::{
     components::Loading,
     styles::{get_loading_text_styles, BASIC_BLOCK_STYLE, LOADING_SCREEN_STYLE},

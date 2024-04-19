@@ -1,54 +1,57 @@
 use bevy::prelude::*;
+use resources::GameTitle;
+use settings::SettingsPlugin;
 use splash::SplashPlugin;
 
 use self::{
-    death_screen::DeathScreenPlugin,
     loading::LoadingPlugin,
     main_menu::MainMenuPlugin,
     pause::PausePlugin,
-    // settings::SettingsPlugin,
     systems::{interact_with_quit_button, interact_with_settings_button},
 };
 
 pub mod components;
-pub mod death_screen;
 pub mod loading;
 pub mod main_menu;
 pub mod pause;
+pub mod settings;
 pub mod splash;
-// pub mod settings;
 pub mod styles;
 pub mod systems;
-// pub mod victory_screen;
+pub mod widgets;
 
-pub struct UiScreensPlugin;
+#[derive(Clone)]
+pub struct UiScreensPlugin {
+    pub title: String,
+}
+pub mod resources;
 
 impl Plugin for UiScreensPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((
-            MainMenuPlugin,
-            PausePlugin,
-            // SettingsPlugin,
-            SplashPlugin,
-            LoadingPlugin,
-            DeathScreenPlugin,
-            // VictoryScreenPlugin,
-        ))
-        .add_systems(
-            Update,
-            (interact_with_quit_button, interact_with_settings_button),
-        );
+        app.insert_resource(GameTitle(self.title.clone()))
+            .add_plugins((
+                MainMenuPlugin,
+                PausePlugin,
+                SettingsPlugin,
+                SplashPlugin,
+                LoadingPlugin,
+            ))
+            .add_systems(
+                Update,
+                (interact_with_quit_button, interact_with_settings_button),
+            );
     }
 }
 
 #[derive(Default, States, Debug, Hash, Eq, PartialEq, Clone)]
-pub enum AppState {
+pub enum UiState {
     MainMenu,
     Loading,
-    Editor,
-    Game,
+    Settings,
+    Hud,
     #[default]
     Splash,
+    Debug,
 }
 
 #[derive(Default, States, Debug, Hash, Eq, PartialEq, Clone)]
@@ -56,5 +59,4 @@ pub enum SimulationState {
     #[default]
     Running,
     Paused,
-    Dead,
 }
