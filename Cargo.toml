@@ -18,9 +18,7 @@ bevy = { version = "^0.13", default-features = false, features = [
     "png",
     "vorbis",
     "x11",
-    "default_font",
 ] }
-bevy_third_person_camera = "0.1.10"
 serde = "1.0.197"
 # Enable only a small amount of optimization in debug mode
 [profile.dev]
