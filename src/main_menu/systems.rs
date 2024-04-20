@@ -1,7 +1,10 @@
 use bevy::prelude::*;
 
 use crate::{
-    components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen, SettingsButton}, resources::GameTitle, styles::*, systems::despawn_screens
+    components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen, SettingsButton},
+    resources::GameTitle,
+    styles::*,
+    systems::despawn_screens,
 };
 
 use super::{
