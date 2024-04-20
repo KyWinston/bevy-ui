@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy_third_person_camera::ThirdPersonCamera;
 
 use crate::{
     components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen},
@@ -47,7 +46,7 @@ pub fn spawn_pause(
 pub fn build_pause(
     commands: &mut Commands,
     asset_server: &Res<AssetServer>,
-    cam_q: &Query<Entity, With<ThirdPersonCamera>>,
+    cam_q: &Query<Entity, With<Camera3d>>,
 ) -> Entity {
     let pause_entity = commands
         .spawn((
@@ -104,8 +103,10 @@ pub fn build_pause(
                 });
         })
         .id();
-    if let Ok(cam) = cam_q.get_single() {
-        commands.entity(pause_entity).insert(TargetCamera(cam));
+    if let Ok(cam) = cam_q.iter() {
+        if cam.is_active {
+            commands.entity(pause_entity).insert(TargetCamera(cam));
+        }
     }
     pause_entity
 }
