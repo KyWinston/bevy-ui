@@ -38,7 +38,7 @@ pub fn interact_with_resume_button(
 pub fn spawn_pause(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    cam_q: Query<(Entity, &Camera3d)>,
+    cam_q: Query<(Entity, &Camera)>,
 ) {
     build_pause(&mut commands, &asset_server, &cam_q);
 }
@@ -46,7 +46,7 @@ pub fn spawn_pause(
 pub fn build_pause(
     commands: &mut Commands,
     asset_server: &Res<AssetServer>,
-    cam_q: &Query<(Entity, &Camera3d)>,
+    cam_q: &Query<(Entity, &Camera)>,
 ) -> Entity {
     let pause_entity = commands
         .spawn((
@@ -103,9 +103,9 @@ pub fn build_pause(
                 });
         })
         .id();
-    for cam in cam_q.iter() {
-        if cam.is_active() {
-            commands.entity(pause_entity).insert(TargetCamera(cam));
+    for (ent, cam) in cam_q.iter() {
+        if cam.is_active {
+            commands.entity(pause_entity).insert(TargetCamera(ent));
         }
     }
     pause_entity
