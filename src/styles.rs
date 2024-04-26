@@ -6,13 +6,13 @@ pub const PRESSED_BUTTON_COLOR: Color = Color::rgb(0.35, 0.35, 0.35);
 
 pub const CENTRAL_PANEL_STYLES: Style = {
     let mut style = Style::DEFAULT;
-    style.flex_direction= FlexDirection::Column;
-    style.justify_content= JustifyContent::Center;
-    style.align_items= AlignItems::Center;
-    style.width= Val::Percent(100.0);
-    style.height= Val::Percent(100.0);
-    style.row_gap= Val::Px(8.0);
-    style.column_gap= Val::Px(8.0);
+    style.flex_direction = FlexDirection::Column;
+    style.justify_content = JustifyContent::Center;
+    style.align_items = AlignItems::Center;
+    style.width = Val::Percent(100.0);
+    style.height = Val::Percent(100.0);
+    style.row_gap = Val::Px(8.0);
+    style.column_gap = Val::Px(8.0);
     style
 };
 
@@ -48,7 +48,6 @@ pub fn get_title_text_styles(asset_server: &Res<AssetServer>) -> TextStyle {
         font: asset_server.load("fonts/FiraSans-Bold.ttf"),
         font_size: 64.0,
         color: Color::WHITE,
-        ..default()
     }
 }
 
@@ -57,6 +56,5 @@ pub fn get_button_text_styles(asset_server: &Res<AssetServer>) -> TextStyle {
         font: asset_server.load("fonts/FiraSans-Bold.ttf"),
         font_size: 32.0,
         color: Color::WHITE,
-        ..default()
     }
 }

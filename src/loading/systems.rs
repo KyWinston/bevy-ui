@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::components::Screen;
+
 use super::{
     components::Loading,
     styles::{get_loading_text_styles, BASIC_BLOCK_STYLE, LOADING_SCREEN_STYLE},
@@ -17,6 +19,7 @@ pub fn build_loading(commands: &mut Commands, asset_server: &Res<AssetServer>) -
                 background_color: BackgroundColor(Color::BLACK),
                 ..default()
             },
+            Screen,
             Loading(Some("Loading...".to_owned())),
         ))
         .with_children(|parent| {

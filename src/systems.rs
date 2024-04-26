@@ -1,11 +1,60 @@
 use bevy::{app::AppExit, prelude::*};
+use sickle_ui::{
+    ui_builder::{UiBuilderExt, UiRoot},
+    widgets::container::UiContainerExt,
+};
 
-use crate::UiState;
+use crate::{
+    components::{UiCamera, UiMainRootNode},
+    resources::IconCache,
+    styles::CENTRAL_PANEL_STYLES,
+    UiState,
+};
 
 use super::{
     components::{QuitButton, Screen, SettingsButton},
     styles::{HOVERED_BUTTON_COLOR, NORMAL_BUTTON_COLOR, PRESSED_BUTTON_COLOR},
 };
+
+pub fn setup(
+    asset_server: Res<AssetServer>,
+    mut commands: Commands,
+    mut cam_q: Query<Entity, With<UiCamera>>,
+    mut icon_cache: ResMut<IconCache>,
+) {
+    let icons_to_cache: Vec<&str> = vec![
+        "embedded://sickle_ui/icons/checkmark.png",
+        "embedded://sickle_ui/icons/chevron_down.png",
+        "embedded://sickle_ui/icons/chevron_left.png",
+        "embedded://sickle_ui/icons/chevron_right.png",
+        "embedded://sickle_ui/icons/chevron_up.png",
+        "embedded://sickle_ui/icons/close.png",
+        "embedded://sickle_ui/icons/exit_white.png",
+        "embedded://sickle_ui/icons/popout_white.png",
+        "embedded://sickle_ui/icons/redo_white.png",
+        "embedded://sickle_ui/icons/submenu_white.png",
+    ];
+
+    for icon in icons_to_cache.iter() {
+        icon_cache.0.push(asset_server.load(*icon));
+    }
+
+    if let Ok(cam) = cam_q.get_single_mut() {
+        commands.ui_builder(UiRoot).container(
+            (
+                NodeBundle {
+                    style: CENTRAL_PANEL_STYLES,
+                    background_color: Color::rgb(0.29, 0.29, 0.29).into(),
+                    ..default()
+                },
+                UiMainRootNode,
+                Screen,
+                TargetCamera(cam),
+            ),
+            |_| {},
+        );
+    }
+}
 
 pub fn interact_with_quit_button(
     commands: Commands,

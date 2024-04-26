@@ -3,6 +3,15 @@ use bevy::prelude::*;
 use super::styles::{get_button_text_styles, BASIC_BUTTON_STYLE, NORMAL_BUTTON_COLOR};
 
 #[derive(Component)]
+pub struct UiMainRootNode;
+
+#[derive(Component)]
+pub struct UiFooterRootNode;
+
+#[derive(Component)]
+pub struct UiCamera;
+
+#[derive(Component)]
 pub struct Screen;
 
 #[derive(Component)]

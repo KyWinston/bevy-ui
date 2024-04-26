@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen, SettingsButton},
-    resources::GameTitle,
+    resources::{GameTitle, IconCache},
     styles::*,
     systems::despawn_screens,
 };
@@ -42,15 +42,17 @@ pub fn interact_with_play_button(
 pub fn spawn_main_menu(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
+    icon_cache: Res<IconCache>,
     title: Res<GameTitle>,
 ) {
-    build_main_menu(&mut commands, &asset_server, title);
+    build_main_menu(&mut commands, &asset_server, title, icon_cache);
 }
 
 pub fn build_main_menu(
     commands: &mut Commands,
     asset_server: &Res<AssetServer>,
     title: Res<GameTitle>,
+    icon_cache: Res<IconCache>,
 ) -> Entity {
     let main_menu_entity = commands
         .spawn((
@@ -73,7 +75,7 @@ pub fn build_main_menu(
                     // Image 1
                     parent.spawn(ImageBundle {
                         style: IMAGE_STYLE,
-                        image: asset_server.load("images/tile_0003.png").into(),
+                        image: asset_server.load(icon_cache.0[5].path().unwrap()).into(),
                         ..default()
                     });
                     //Text
@@ -90,7 +92,7 @@ pub fn build_main_menu(
 
                     parent.spawn(ImageBundle {
                         style: IMAGE_STYLE,
-                        image: asset_server.load("images/tile_0003.png").into(),
+                        image: asset_server.load(icon_cache.0[5].path().unwrap()).into(),
                         ..default()
                     });
                 });

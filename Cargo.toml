@@ -7,19 +7,18 @@ repository = "https://github.com/KyleWinston/bevy-ui"
 license = "MIT OR Apache-2.0"
 edition = "2021"
 keywords = ["bevy", "menus", "ui"]
+exclude=["/examples"]
 
 [dependencies]
-bevy = { version = "^0.13", default-features = false, features = [
+bevy = { version = "^0.13.2", default-features = false, features = [
     "bevy_asset",
-    "bevy_winit",
-    "bevy_core_pipeline",
     "bevy_text",
     "bevy_ui",
     "png",
-    "vorbis",
-    "x11",
 ] }
-serde = "1.0.197"
+bevy_egui = "0.27.0"
+sickle_ui = { git = "https://github.com/KyWinston/sickle_ui.git", branch = "main" }
+
 # Enable only a small amount of optimization in debug mode
 [profile.dev]
 opt-level = 1
