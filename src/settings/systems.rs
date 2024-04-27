@@ -1,11 +1,5 @@
 use bevy::prelude::*;
-use sickle_ui::{
-    ui_builder::UiBuilderExt,
-    widgets::{
-        container::UiContainerExt,
-        tab_container::{self, UiTabContainerExt, UiTabContainerSubExt},
-    },
-};
+
 
 use crate::{
     components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen, UiMainRootNode},
@@ -26,8 +20,6 @@ pub fn build_settings(
         return;
     };
     commands
-        .ui_builder(main)
-        .commands()
         .spawn(NodeBundle {
             style: CENTRAL_PANEL_STYLES,
             ..default()
