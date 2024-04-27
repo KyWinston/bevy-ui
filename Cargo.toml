@@ -33,7 +33,7 @@ bevy = { version = "^0.13.2", default-features = false, features = [
     "webgl2",                # Web: use WebGL2 instead of WebGPU
 ] }
 
-sickle_ui = { path = "crates/sickle_ui" }
+# sickle_ui = { path = "crates/sickle_ui" }
 
 # Enable only a small amount of optimization in debug mode
 [profile.dev]
