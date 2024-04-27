@@ -26,14 +26,11 @@ bevy = { version = "^0.13.2", default-features = false, features = [
     # File formats:
     "png", # PNG image format for simple 2D images
 
-
     # Platform-specific:
     "x11",                   # Linux: Support X11 windowing system
     "android_shared_stdcxx", # Android: use shared C++ library
     "webgl2",                # Web: use WebGL2 instead of WebGPU
 ] }
-
-# sickle_ui = { path = "crates/sickle_ui" }
 
 # Enable only a small amount of optimization in debug mode
 [profile.dev]
@@ -41,7 +38,6 @@ opt-level = 1
 
 [profile.dev.package."*"]
 opt-level = 3
-
 
 [profile.release]
 codegen-units = 1
