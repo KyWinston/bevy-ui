@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use resources::GameTitle;
 use settings::SettingsPlugin;
+use sickle_ui::SickleUiPlugin;
 use splash::SplashPlugin;
 
 use self::{
@@ -34,6 +35,7 @@ impl Plugin for UiScreensPlugin {
                 SettingsPlugin,
                 SplashPlugin,
                 LoadingPlugin,
+                SickleUiPlugin
             ))
             .add_systems(
                 Update,

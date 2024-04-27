@@ -1,5 +1,6 @@
-use bevy::prelude::*;
+use std::ops::RangeInclusive;
 
+use bevy::prelude::*;
 
 use crate::{
     components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen, UiMainRootNode},
@@ -11,15 +12,12 @@ use super::{
     styles::{get_subtitle_text_styles, SECTION_STYLE},
 };
 
-pub fn build_settings(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    main_node: Query<Entity, With<UiMainRootNode>>,
-) {
-    let Ok(main) = main_node.get_single() else {
-        return;
-    };
-    commands
+pub fn spawn_settings(commands: Commands, asset_server: Res<AssetServer>) {
+    build_settings(commands, asset_server)
+}
+
+pub fn build_settings(mut commands: Commands, asset_server: Res<AssetServer>) {
+    let root_node = commands
         .spawn(NodeBundle {
             style: CENTRAL_PANEL_STYLES,
             ..default()
@@ -42,5 +40,6 @@ pub fn build_settings(
                         ..default()
                     });
                 });
-        });
+        })
+        .id();
 }
