@@ -1,7 +1,13 @@
 use bevy::prelude::*;
+use bevy_egui::EguiPlugin;
+use bevy_mod_picking::{
+    events::{Move, Pointer},
+    DefaultPickingPlugins,
+};
 use resources::GameTitle;
 use settings::SettingsPlugin;
 use splash::SplashPlugin;
+use widgets::slider::systems::update_value;
 
 use self::{
     loading::LoadingPlugin,
@@ -19,6 +25,7 @@ pub mod settings;
 pub mod splash;
 pub mod styles;
 pub mod systems;
+pub mod widgets;
 
 #[derive(Clone)]
 pub struct UiScreensPlugin {
@@ -33,11 +40,17 @@ impl Plugin for UiScreensPlugin {
                 PausePlugin,
                 SettingsPlugin,
                 SplashPlugin,
+                DefaultPickingPlugins,
                 LoadingPlugin,
+                EguiPlugin,
             ))
             .add_systems(
                 Update,
-                (interact_with_quit_button, interact_with_settings_button),
+                (
+                    interact_with_quit_button,
+                    update_value,
+                    interact_with_settings_button,
+                ),
             );
     }
 }
