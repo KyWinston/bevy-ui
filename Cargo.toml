@@ -10,7 +10,7 @@ keywords = ["bevy", "menus", "ui"]
 exclude = ["/examples"]
 
 [dependencies]
-bevy = { version = "^0.13.2", default-features = false, features = [
+bevy = { version = "0.13.2", default-features = false, features = [
     "dynamic_linking",
     "multi-threaded",     # Run with multithreading
     "bevy_asset",         # Assets management
