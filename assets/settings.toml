@@ -1,0 +1,14 @@
+categories = [
+    { name = 'control settings', contents = [
+        { tag = "Mouse Sensitivity", value = 0 },
+        { tag = "Brightness", value = 0 },
+    ] },
+    { name = 'control settings', contents = [
+        { tag = "Mouse Sensitivity", value = 0 },
+        { tag = "Brightness", value = 0 },
+    ] },
+    { name = 'control settings', contents = [
+        { tag = "Mouse Sensitivity", value = 0 },
+        { tag = "Birghtness", value = 0 },
+    ] },
+]

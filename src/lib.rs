@@ -1,9 +1,6 @@
 use bevy::prelude::*;
 use bevy_egui::EguiPlugin;
-use bevy_mod_picking::{
-    events::{Move, Pointer},
-    DefaultPickingPlugins,
-};
+use bevy_mod_picking::DefaultPickingPlugins;
 use resources::GameTitle;
 use settings::SettingsPlugin;
 use splash::SplashPlugin;
