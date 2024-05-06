@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use crate::{
+    components::Screen,
     settings::resources::TomlAsset,
     styles::{get_title_text_styles, CENTRAL_PANEL_STYLES, TITLE_STYLE},
     widgets::slider::components::{Knob, Rack},
@@ -28,10 +29,13 @@ pub fn build_settings(
     settings: Res<SettingsVals>,
 ) {
     let _root_node = commands
-        .spawn(NodeBundle {
-            style: CENTRAL_PANEL_STYLES,
-            ..default()
-        })
+        .spawn((
+            NodeBundle {
+                style: CENTRAL_PANEL_STYLES,
+                ..default()
+            },
+            Screen,
+        ))
         .with_children(|parent| {
             parent.spawn(NodeBundle {
                 style: TITLE_STYLE,
