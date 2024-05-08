@@ -1,13 +1,16 @@
 use bevy::prelude::*;
 
-use crate::components::Screen;
+use crate::{components::Screen, UiState};
 
 use super::components::{SplashScreen, SplashTimer};
 
-pub fn build_splash(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let icon = asset_server.load("branding/icon.png");
-    // Display the logo
-    commands
+pub fn spawn_splash(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.insert_resource(SplashTimer(Timer::from_seconds(5.0, TimerMode::Once)));
+    build_splash(commands, asset_server);
+}
+
+pub fn build_splash(mut commands: Commands, asset_server: Res<AssetServer>) -> Entity {
+    let splash = commands
         .spawn((
             NodeBundle {
                 style: Style {
@@ -17,6 +20,7 @@ pub fn build_splash(mut commands: Commands, asset_server: Res<AssetServer>) {
                     height: Val::Percent(100.0),
                     ..default()
                 },
+                background_color: BackgroundColor(Color::GRAY),
                 ..default()
             },
             SplashScreen,
@@ -29,10 +33,21 @@ pub fn build_splash(mut commands: Commands, asset_server: Res<AssetServer>) {
                     width: Val::Px(200.0),
                     ..default()
                 },
-                image: UiImage::new(icon),
+                image: UiImage::new(asset_server.load("branding/icon.png")),
                 ..default()
             });
-        });
-    // Insert the timer as a resource
-    commands.insert_resource(SplashTimer(Timer::from_seconds(1.0, TimerMode::Once)));
+        })
+        .id();
+    splash
+}
+
+pub fn count_down(
+    mut state: ResMut<NextState<UiState>>,
+    mut timer: ResMut<SplashTimer>,
+    time: Res<Time>,
+) {
+    timer.0.tick(time.delta());
+    if timer.finished() {
+        state.set(UiState::MainMenu);
+    }
 }

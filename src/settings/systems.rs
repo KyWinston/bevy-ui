@@ -5,10 +5,10 @@ use crate::{
     settings::resources::TomlAsset,
     styles::{get_title_text_styles, CENTRAL_PANEL_STYLES, TITLE_STYLE},
     widgets::slider::components::{Knob, Rack},
-    UiState,
 };
 
 use super::{
+    components::SettingsUi,
     resources::{AllSettings, SettingsVals},
     styles::get_subtitle_text_styles,
 };
@@ -34,6 +34,7 @@ pub fn build_settings(
                 style: CENTRAL_PANEL_STYLES,
                 ..default()
             },
+            SettingsUi,
             Screen,
         ))
         .with_children(|parent| {
@@ -89,11 +90,7 @@ pub fn build_settings(
         .id();
 }
 
-pub fn init_settings(
-    mut commands: Commands,
-    settings: Res<SettingsVals>,
-    mut state: ResMut<NextState<UiState>>,
-) {
+pub fn init_settings(mut commands: Commands, settings: Res<SettingsVals>) {
     for (idx, x) in settings.0.iter().enumerate() {
         commands.spawn((
             NodeBundle {
@@ -113,7 +110,6 @@ pub fn init_settings(
             },
         ));
     }
-    state.set(UiState::MainMenu);
 }
 
 pub fn load_settings_toml(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -128,7 +124,6 @@ pub fn assign_to_resource(
 ) {
     if let Some(stngs) = settings.get(&toml.0) {
         let asset = &stngs.categories[0].contents;
-        println!("{:?}", asset);
         commands.insert_resource(SettingsVals(asset.to_vec()));
     }
 }

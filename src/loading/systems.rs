@@ -45,9 +45,3 @@ pub fn build_loading(commands: &mut Commands, asset_server: &Res<AssetServer>) -
         .id();
     loading_entity
 }
-
-pub fn despawn_loading(mut commands: Commands, loading_q: Query<Entity, With<Loading>>) {
-    if let Ok(loading_entity) = loading_q.get_single() {
-        commands.entity(loading_entity).despawn_recursive();
-    }
-}
