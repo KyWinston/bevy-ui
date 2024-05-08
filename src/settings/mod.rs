@@ -21,9 +21,11 @@ impl Plugin for SettingsPlugin {
         app.insert_resource::<SettingsVals>(SettingsVals(vec![]))
             .add_systems(OnEnter(UiState::Settings), spawn_settings)
             .add_systems(OnExit(UiState::Settings), despawn_screens)
-            .add_systems(OnEnter(UiState::Splash), assign_to_resource)
+            .add_systems(
+                OnEnter(UiState::Splash),
+                (init_settings, assign_to_resource),
+            )
             .add_systems(Startup, load_settings_toml)
-            .add_systems(Update, init_settings.run_if(in_state(UiState::Splash)))
             .add_plugins(TomlAssetPlugin::<AllSettings>::new(&["settings.toml"]));
     }
 }

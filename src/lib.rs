@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy_egui::EguiPlugin;
 use bevy_mod_picking::DefaultPickingPlugins;
 use resources::GameTitle;
 use settings::SettingsPlugin;
@@ -7,6 +6,7 @@ use splash::SplashPlugin;
 use widgets::slider::systems::update_value;
 
 use self::{
+    hud::HudPlugin,
     loading::LoadingPlugin,
     main_menu::MainMenuPlugin,
     pause::PausePlugin,
@@ -14,6 +14,7 @@ use self::{
 };
 
 pub mod components;
+pub mod hud;
 pub mod loading;
 pub mod main_menu;
 pub mod pause;
@@ -37,9 +38,9 @@ impl Plugin for UiScreensPlugin {
                 PausePlugin,
                 SettingsPlugin,
                 SplashPlugin,
+                HudPlugin,
                 DefaultPickingPlugins,
                 LoadingPlugin,
-                EguiPlugin,
             ))
             .add_systems(
                 Update,
