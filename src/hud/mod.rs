@@ -11,7 +11,7 @@ pub struct HudPlugin;
 
 impl Plugin for HudPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(UiState::Loading), spawn_hud)
+        app.add_systems(OnEnter(UiState::Hud), spawn_hud)
             .add_systems(OnExit(UiState::Hud), despawn_screens);
     }
 }
