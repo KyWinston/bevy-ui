@@ -1,4 +1,4 @@
-use crate::{components::Screen, styles::CENTRAL_PANEL_STYLES};
+use crate::styles::CENTRAL_PANEL_STYLES;
 use bevy::prelude::*;
 
 use super::components::Hud;

@@ -12,7 +12,7 @@ pub struct SettingsVals(pub Vec<SettingsVal>);
 #[derive(Deserialize, Clone, Debug)]
 pub struct SettingsVal {
     pub tag: String,
-    pub value: u32,
+    pub value: f32,
 }
 
 #[derive(Deserialize)]
