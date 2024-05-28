@@ -9,7 +9,7 @@ use crate::{
 
 use super::{
     components::SettingsUi,
-    resources::{AllSettings, SettingsVals},
+    resources::{AllSettings, SettingsVal, SettingsVals},
     styles::get_subtitle_text_styles,
 };
 
@@ -123,7 +123,13 @@ pub fn assign_to_resource(
     toml: Res<TomlAsset>,
 ) {
     if let Some(stngs) = settings.get(&toml.0) {
-        let asset = &stngs.categories[0].contents;
-        commands.insert_resource(SettingsVals(asset.to_vec()));
+        let mut new_settings:Vec<SettingsVal> = vec![];
+        for cat in &stngs.categories {
+            for content in cat.contents.as_slice(){
+                new_settings.push(content.clone())
+            }
+        }
+        commands.insert_resource(SettingsVals(new_settings.to_vec()));
+
     }
 }
