@@ -3,8 +3,8 @@ use bevy::prelude::*;
 use crate::{
     components::Screen,
     settings::resources::TomlAsset,
-    styles::{get_title_text_styles, CENTRAL_PANEL_STYLES, TITLE_STYLE},
-    widgets::slider::components::{Knob, Rack},
+    styles::{get_title_text_styles, CENTRAL_PANEL_STYLES, TITLE_STYLE}, widgets::slider::components::{Knob, Rack},
+    // widgets::slider::components::{Knob, Rack},
 };
 
 use super::{
@@ -72,7 +72,7 @@ pub fn build_settings(
                             ..default()
                         },
 
-                        background_color: BackgroundColor(Color::DARK_GRAY),
+                        background_color: BackgroundColor(Color::rgb(0.4, 0.4, 0.4)),
                         ..default()
                     },
                     Rack {
@@ -101,7 +101,7 @@ pub fn init_settings(mut commands: Commands, settings: Res<SettingsVals>) {
                     ..default()
                 },
 
-                background_color: BackgroundColor(Color::GRAY),
+                background_color: BackgroundColor(Color::rgb(0.5, 0.5, 0.5)),
                 ..default()
             },
             Knob {
@@ -126,7 +126,7 @@ pub fn assign_to_resource(
         let mut new_settings:Vec<SettingsVal> = vec![];
         for cat in &stngs.categories {
             for content in cat.contents.as_slice(){
-                new_settings.push(content.clone())
+                new_settings.push(content.clone());
             }
         }
         commands.insert_resource(SettingsVals(new_settings.to_vec()));

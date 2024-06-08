@@ -1,16 +1,13 @@
 use bevy::prelude::*;
-use bevy_mod_picking::DefaultPickingPlugins;
 use resources::GameTitle;
 use settings::SettingsPlugin;
+// use settings::SettingsPlugin;
 use splash::SplashPlugin;
-use widgets::slider::systems::update_value;
+// use widgets::slider::systems::update_value;
 
 use self::{
-    hud::HudPlugin,
-    loading::LoadingPlugin,
-    main_menu::MainMenuPlugin,
-    pause::PausePlugin,
-    systems::{interact_with_quit_button, interact_with_settings_button},
+    hud::HudPlugin, loading::LoadingPlugin, main_menu::MainMenuPlugin, pause::PausePlugin,
+    systems::interact_with_quit_button,
 };
 
 pub mod components;
@@ -39,21 +36,20 @@ impl Plugin for UiScreensPlugin {
                 SettingsPlugin,
                 SplashPlugin,
                 HudPlugin,
-                DefaultPickingPlugins,
                 LoadingPlugin,
             ))
             .add_systems(
                 Update,
                 (
                     interact_with_quit_button,
-                    update_value,
-                    interact_with_settings_button,
+                    // update_value,
+                    // interact_with_settings_button,
                 ),
             );
     }
 }
 
-#[derive(Default, Component, States, Debug, Hash, Eq, PartialEq, Clone, Reflect)]
+#[derive(Default, States, Component, Debug, Hash, Eq, PartialEq, Clone, Reflect)]
 #[reflect(Component)]
 pub enum UiState {
     MainMenu,
@@ -65,7 +61,7 @@ pub enum UiState {
     Debug,
 }
 
-#[derive(Default, States, Debug, Hash, Eq, PartialEq, Clone)]
+#[derive(Default,States, Debug, Hash, Eq, PartialEq, Clone)]
 pub enum SimulationState {
     #[default]
     Running,

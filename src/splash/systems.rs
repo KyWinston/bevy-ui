@@ -20,7 +20,7 @@ pub fn build_splash(mut commands: Commands, asset_server: Res<AssetServer>) -> E
                     height: Val::Percent(100.0),
                     ..default()
                 },
-                background_color: BackgroundColor(Color::GRAY),
+                background_color: BackgroundColor(Color::rgb(0.5, 0.5, 0.5)),
                 ..default()
             },
             SplashScreen,

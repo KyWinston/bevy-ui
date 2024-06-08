@@ -56,7 +56,7 @@ pub fn build_main_menu(
         .spawn((
             NodeBundle {
                 style: CENTRAL_PANEL_STYLES,
-                background_color: Color::GRAY.into(),
+                background_color: Color::rgb(0.5, 0.5, 0.5).into(),
                 ..default()
             },
             MainMenu,

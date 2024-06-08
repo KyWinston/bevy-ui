@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use super::styles::{get_button_text_styles, BASIC_BUTTON_STYLE, NORMAL_BUTTON_COLOR};
+use super::styles::{get_button_text_styles, BASIC_BUTTON_STYLE};
 
 #[derive(Component)]
 pub struct UiMainRootNode;
@@ -38,7 +38,7 @@ impl BasicButtonBundle {
         Self {
             button: ButtonBundle {
                 style: BASIC_BUTTON_STYLE,
-                background_color: NORMAL_BUTTON_COLOR.into(),
+                // background_color: NORMAL_BUTTON_COLOR.into(),
                 ..default()
             },
         }
