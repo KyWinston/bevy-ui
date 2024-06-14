@@ -1,8 +1,14 @@
-use bevy::prelude::*;
+use bevy::{
+    color::palettes::{
+        css::{STEEL_BLUE, WHITE},
+        tailwind::{BLUE_100, BLUE_200},
+    },
+    prelude::*,
+};
 
-pub const NORMAL_BUTTON_COLOR: Color = Color::rgb(0.15, 0.15, 0.15);
-pub const HOVERED_BUTTON_COLOR: Color = Color::rgb(0.25, 0.25, 0.25);
-pub const PRESSED_BUTTON_COLOR: Color = Color::rgb(0.35, 0.35, 0.35);
+pub const NORMAL_BUTTON_COLOR: Srgba = STEEL_BLUE;
+pub const HOVERED_BUTTON_COLOR: Srgba = BLUE_100;
+pub const PRESSED_BUTTON_COLOR: Srgba = BLUE_200;
 
 pub const CENTRAL_PANEL_STYLES: Style = {
     let mut style = Style::DEFAULT;
@@ -47,7 +53,7 @@ pub fn get_title_text_styles(asset_server: &Res<AssetServer>) -> TextStyle {
     TextStyle {
         font: asset_server.load("fonts/FiraSans-Bold.ttf"),
         font_size: 64.0,
-        color: Color::WHITE,
+        color: Color::srgb_from_array(WHITE.to_f32_array_no_alpha()),
     }
 }
 
@@ -55,6 +61,6 @@ pub fn get_button_text_styles(asset_server: &Res<AssetServer>) -> TextStyle {
     TextStyle {
         font: asset_server.load("fonts/FiraSans-Bold.ttf"),
         font_size: 32.0,
-        color: Color::WHITE,
+        color: Color::srgb_from_array(WHITE.to_f32_array_no_alpha()),
     }
 }

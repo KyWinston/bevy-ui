@@ -28,7 +28,7 @@ pub fn interact_with_quit_button(
                         next_state.set(UiState::MainMenu);
                     }
                     UiState::MainMenu => {
-                        app_exit_event_writer.send(AppExit);
+                        app_exit_event_writer.send(AppExit::Success);
                     }
                     UiState::Settings => {
                         next_state.set(UiState::MainMenu);

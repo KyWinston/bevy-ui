@@ -15,8 +15,8 @@ pub fn update_value(
         if let Ok((knob, mut style)) = ui_q.get_mut(e.target) {
             style.left =
                 Val::Px((e.pointer_location.position.x + e.event.delta.x).clamp(0.0, 500.0));
-            for setting in settings.0.iter_mut(){
-                for _r in rack_q.iter_mut().filter(|p|{p.index_tag == knob.index_tag}){
+            for setting in settings.0.iter_mut() {
+                for _r in rack_q.iter_mut().filter(|p| p.index_tag == knob.index_tag) {
                     setting.value = knob.value;
                 }
             }

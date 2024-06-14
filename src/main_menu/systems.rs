@@ -16,24 +16,24 @@ pub fn interact_with_play_button(
     commands: Commands,
     screen_q: Query<Entity, With<Screen>>,
     mut button_q: Query<
-        (&Interaction, &mut BackgroundColor),
+        (&Interaction, &mut UiImage),
         (Changed<Interaction>, With<PlayButton>),
     >,
     mut load: EventWriter<StartLoad>,
 ) {
-    if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
+    if let Ok((interaction, mut background)) = button_q.get_single_mut() {
         match *interaction {
             Interaction::Pressed => {
-                *background_color = PRESSED_BUTTON_COLOR.into();
+                background.color = PRESSED_BUTTON_COLOR.into();
                 despawn_screens(commands, screen_q);
                 load.send(StartLoad);
             }
 
             Interaction::Hovered => {
-                *background_color = HOVERED_BUTTON_COLOR.into();
+                background.color = HOVERED_BUTTON_COLOR.into();
             }
             Interaction::None => {
-                *background_color = NORMAL_BUTTON_COLOR.into();
+                background.color = NORMAL_BUTTON_COLOR.into();
             }
         }
     }
@@ -56,7 +56,7 @@ pub fn build_main_menu(
         .spawn((
             NodeBundle {
                 style: CENTRAL_PANEL_STYLES,
-                background_color: Color::rgb(0.5, 0.5, 0.5).into(),
+                background_color: Color::srgb(0.5, 0.5, 0.5).into(),
                 ..default()
             },
             MainMenu,

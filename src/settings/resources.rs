@@ -6,16 +6,16 @@ use bevy::{
 
 use serde::Deserialize;
 
-#[derive(Resource)]
+#[derive(Resource, Asset, TypePath)]
 pub struct SettingsVals(pub Vec<SettingsVal>);
 
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Deserialize, Asset, TypePath, Clone, Debug)]
 pub struct SettingsVal {
     pub tag: String,
     pub value: u32,
 }
 
-#[derive(Deserialize)]
+#[derive(Asset, TypePath, Deserialize)]
 pub struct SettingsCategory {
     pub name: String,
     pub contents: Vec<SettingsVal>,
