@@ -6,6 +6,8 @@ authors = ["Ky Roberts", "Ky Roberts<kywinston@proton.me>"]
 repository = "https://github.com/KyleWinston/bevy-ui"
 license = "MIT OR Apache-2.0"
 edition = "2021"
+publish = true
+
 keywords = ["bevy", "menus", "ui"]
 exclude = ["/examples"]
 
