@@ -1,22 +1,19 @@
 use bevy::prelude::*;
+use bevy_lunex::UiPlugin;
+use main_menu::MainMenuPlugin;
 use resources::GameTitle;
-use settings::SettingsPlugin;
-// use settings::SettingsPlugin;
 use splash::SplashPlugin;
-// use widgets::slider::systems::update_value;
+use systems::init_ui_cam;
+use widgets::button::ButtonPlugin;
 
-use self::{
-    hud::HudPlugin, loading::LoadingPlugin, main_menu::MainMenuPlugin, pause::PausePlugin,
-    systems::interact_with_quit_button,
-};
 
 pub mod components;
-pub mod hud;
-pub mod loading;
+// pub mod hud;
+// pub mod loading;
 pub mod main_menu;
-pub mod pause;
+// pub mod pause;
 pub mod resources;
-pub mod settings;
+// pub mod settings;
 pub mod splash;
 pub mod styles;
 pub mod systems;
@@ -32,20 +29,14 @@ impl Plugin for UiScreensPlugin {
         app.insert_resource(GameTitle(self.title.clone()))
             .add_plugins((
                 MainMenuPlugin,
-                PausePlugin,
-                SettingsPlugin,
+                // PausePlugin,
+                // SettingsPlugin,
                 SplashPlugin,
-                HudPlugin,
-                LoadingPlugin,
-            ))
-            .add_systems(
-                Update,
-                (
-                    interact_with_quit_button,
-                    // update_value,
-                    // interact_with_settings_button,
-                ),
-            );
+                // HudPlugin,
+                ButtonPlugin,
+                UiPlugin,
+                // LoadingPlugin,
+            )).add_systems(Startup, init_ui_cam);
     }
 }
 
@@ -61,7 +52,7 @@ pub enum UiState {
     Debug,
 }
 
-#[derive(Default,States, Debug, Hash, Eq, PartialEq, Clone)]
+#[derive(Default, States, Debug, Hash, Eq, PartialEq, Clone)]
 pub enum SimulationState {
     #[default]
     Running,

@@ -1,73 +1,61 @@
-use bevy::{app::AppExit, prelude::*};
-
-use crate::UiState;
-
-use super::{
-    components::{QuitButton, Screen, SettingsButton},
-    styles::{HOVERED_BUTTON_COLOR, NORMAL_BUTTON_COLOR, PRESSED_BUTTON_COLOR},
+use bevy::prelude::*;
+use bevy_lunex::{
+    prelude::{MainUi, Pickable},
+    Cursor2d,
 };
 
-pub fn interact_with_quit_button(
-    commands: Commands,
-    mut button_q: Query<
-        (&Interaction, &mut BackgroundColor),
-        (Changed<Interaction>, With<QuitButton>),
-    >,
-    state: Res<State<UiState>>,
-    screen_q: Query<Entity, With<Screen>>,
-    mut next_state: ResMut<NextState<UiState>>,
-    mut app_exit_event_writer: EventWriter<AppExit>,
-) {
-    if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
-        match *interaction {
-            Interaction::Pressed => {
-                *background_color = PRESSED_BUTTON_COLOR.into();
-                despawn_screens(commands, screen_q);
-                match state.get() {
-                    UiState::Hud => {
-                        next_state.set(UiState::MainMenu);
-                    }
-                    UiState::MainMenu => {
-                        app_exit_event_writer.send(AppExit::Success);
-                    }
-                    UiState::Settings => {
-                        next_state.set(UiState::MainMenu);
-                    }
-                    _ => (),
-                }
-            }
-            Interaction::Hovered => {
-                *background_color = HOVERED_BUTTON_COLOR.into();
-            }
-            Interaction::None => {
-                *background_color = NORMAL_BUTTON_COLOR.into();
-            }
-        }
-    }
+use crate::{splash::components::SplashScreen, UiState};
+
+use super::components::Screen;
+
+pub fn init_ui_cam(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands
+        .spawn((
+            Camera2dBundle {
+                camera: Camera {
+                    is_active: true,
+                    ..default()
+                },
+                transform: Transform::from_xyz(0.0, 0.0, 1000.0),
+                ..default()
+            },
+            MainUi,
+        ))
+        .with_children(|cam| {
+            cam.spawn((
+                Cursor2d::new()
+                    .native_cursor(false)
+                    .register_cursor(CursorIcon::Default, 0, (14.0, 14.0))
+                    .register_cursor(CursorIcon::Pointer, 1, (10.0, 12.0))
+                    .register_cursor(CursorIcon::Grab, 2, (40.0, 40.0)),
+                Pickable::IGNORE,
+            ));
+        });
+    commands.spawn(SplashScreen);
 }
 
-pub fn interact_with_settings_button(
-    mut button_q: Query<
-        (&Interaction, &mut BackgroundColor),
-        (Changed<Interaction>, With<SettingsButton>),
-    >,
-    mut settings_state: ResMut<NextState<UiState>>,
-) {
-    if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
-        match *interaction {
-            Interaction::Pressed => {
-                *background_color = PRESSED_BUTTON_COLOR.into();
-                settings_state.set(UiState::Settings);
-            }
-            Interaction::Hovered => {
-                *background_color = HOVERED_BUTTON_COLOR.into();
-            }
-            Interaction::None => {
-                *background_color = NORMAL_BUTTON_COLOR.into();
-            }
-        }
-    }
-}
+// pub fn interact_with_settings_button(
+//     mut button_q: Query<
+//         (&Interaction, &mut BackgroundColor),
+//         (Changed<Interaction>, With<SettingsButton>),
+//     >,
+//     mut settings_state: ResMut<NextState<UiState>>,
+// ) {
+//     if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
+//         match *interaction {
+//             Interaction::Pressed => {
+//                 *background_color = PRESSED_BUTTON_COLOR.into();
+//                 settings_state.set(UiState::Settings);
+//             }
+//             Interaction::Hovered => {
+//                 *background_color = HOVERED_BUTTON_COLOR.into();
+//             }
+//             Interaction::None => {
+//                 *background_color = NORMAL_BUTTON_COLOR.into();
+//             }
+//         }
+//     }
+// }
 
 // pub fn interact_with_respawn_button(
 //     mut button_q: Query<

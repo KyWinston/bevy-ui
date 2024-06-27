@@ -1,5 +1,6 @@
 use bevy::prelude::*;
-use bevy_basic_ui::{components::UiCamera, SimulationState, UiScreensPlugin, UiState};
+use bevy_basic_ui::{splash::components::SplashScreen, SimulationState, UiScreensPlugin, UiState};
+use bevy_lunex::prelude::MainUi;
 
 fn main() {
     App::new()
@@ -11,10 +12,5 @@ fn main() {
                 title: "Test".to_string(),
             },
         ))
-        .add_systems(Startup, init_cam)
         .run();
-}
-
-fn init_cam(mut commands: Commands) {
-    commands.spawn((Camera3dBundle::default(), UiCamera));
 }

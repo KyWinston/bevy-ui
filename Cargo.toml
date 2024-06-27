@@ -9,21 +9,21 @@ edition = "2021"
 publish = true
 
 keywords = ["bevy", "menus", "ui"]
-exclude = ["/examples"]
-
+# exclude = ["/examples"]
 
 [dependencies]
 serde.workspace = true
 bevy = { workspace = true, default-features = false, features = [
-    "bevy_asset",
-    "bevy_scene",
+    "bevy_core_pipeline",
+    "bevy_sprite",
+    "bevy_state",
     "bevy_winit",
+    "multi_threaded",
+    "vorbis",
     "bevy_text",
-    "bevy_ui",
     "png",
+    "x11"
 ] }
-bevy-inspector-egui.workspace = true
 bevy_common_assets = { version = "0.10.0", features = ["toml"] }
 async-executor = "1.12.0"
-bevy_mod_picking = "0.20.0-rc.0"
-bevy_lunex = "0.1.0-alpha.2"
+bevy_lunex = { git = "https://github.com/bytestring-net/bevy_lunex", branch = "dev" }
