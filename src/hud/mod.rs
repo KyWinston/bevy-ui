@@ -1,9 +1,7 @@
-
 use bevy::prelude::*;
+use systems::build_hud;
 
-use crate::{systems::despawn_screens, UiState};
-
-use self::systems::spawn_hud;
+use crate::UiState;
 
 pub mod components;
 pub mod systems;
@@ -12,7 +10,6 @@ pub struct HudPlugin;
 
 impl Plugin for HudPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(UiState::Hud), spawn_hud)
-            .add_systems(OnExit(UiState::Hud), despawn_screens);
+        app.add_systems(OnEnter(UiState::Hud), build_hud);
     }
 }

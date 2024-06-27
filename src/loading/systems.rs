@@ -7,12 +7,8 @@ use super::{
     styles::{get_loading_text_styles, BASIC_BLOCK_STYLE, LOADING_SCREEN_STYLE},
 };
 
-pub fn spawn_loading(mut commands: Commands, asset_server: Res<AssetServer>) {
-    build_loading(&mut commands, &asset_server);
-}
-
-pub fn build_loading(commands: &mut Commands, asset_server: &Res<AssetServer>) -> Entity {
-    let loading_entity = commands
+pub fn build_loading(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands
         .spawn((
             NodeBundle {
                 style: LOADING_SCREEN_STYLE,
@@ -41,7 +37,11 @@ pub fn build_loading(commands: &mut Commands, asset_server: &Res<AssetServer>) -
                         ..default()
                     });
                 });
-        })
-        .id();
-    loading_entity
+        });
+}
+
+pub fn despawn_loading(mut commands: Commands, query: Query<Entity, With<Screen>>) {
+    for q in query.iter() {
+        commands.entity(q).despawn_recursive();
+    }
 }

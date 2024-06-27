@@ -1,6 +1,9 @@
 use bevy::{
     color::palettes::css::{BLANCHED_ALMOND, OLIVE_DRAB},
     prelude::*,
+    render::render_resource::{
+        Extent3d, TextureDescriptor, TextureDimension, TextureFormat, TextureUsages,
+    },
     sprite::Anchor,
 };
 use bevy_lunex::{
@@ -10,7 +13,8 @@ use bevy_lunex::{
 };
 
 use crate::{
-    components::Screen, resources::GameTitle, styles::*, widgets::button::components::CustomButton,
+    components::Screen, hud::components::Hud, resources::GameTitle, styles::*,
+    widgets::button::components::CustomButton,
 };
 
 use super::{
@@ -25,13 +29,9 @@ pub fn interact_with_menu_button(
     button_q: Query<&MainMenuButton>,
 ) {
     for event in events.read() {
-        println!("button clicked");
         if let Ok(mm_btn) = button_q.get(event.target) {
-            println!("menu button clicked");
-
             match mm_btn {
                 MainMenuButton::NewGame => {
-                    println!("play button clicked");
                     load_ev.send(StartLoad);
                 }
                 MainMenuButton::QuitGame => {

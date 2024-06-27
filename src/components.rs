@@ -9,7 +9,7 @@ pub struct UiMainRootNode;
 pub struct UiFooterRootNode;
 
 #[derive(Component)]
-pub struct UiCamera;
+pub struct MainCam;
 
 #[derive(Component)]
 pub struct Screen;

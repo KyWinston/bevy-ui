@@ -4,19 +4,14 @@ use bevy_lunex::{
     Cursor2d,
 };
 
-use crate::{splash::components::SplashScreen, UiState};
-
-use super::components::Screen;
+use crate::{hud::components::Hud, splash::components::SplashScreen, UiState};
 
 pub fn init_ui_cam(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
         .spawn((
             Camera2dBundle {
-                camera: Camera {
-                    is_active: true,
-                    ..default()
-                },
-                transform: Transform::from_xyz(0.0, 0.0, 1000.0),
+                camera: Camera { ..default() },
+                transform: Transform::from_xyz(0.0, 0.0, 0.0),
                 ..default()
             },
             MainUi,
@@ -31,6 +26,8 @@ pub fn init_ui_cam(mut commands: Commands, asset_server: Res<AssetServer>) {
                 Pickable::IGNORE,
             ));
         });
+
+    commands.spawn(Hud);
     commands.spawn(SplashScreen);
 }
 
@@ -98,12 +95,6 @@ pub fn init_ui_cam(mut commands: Commands, asset_server: Res<AssetServer>) {
 //         }
 //     }
 // }
-
-pub fn despawn_screens(mut commands: Commands, mut screen_q: Query<Entity, With<Screen>>) {
-    for ent in screen_q.iter_mut() {
-        commands.entity(ent).despawn_recursive();
-    }
-}
 
 pub fn switch_to_menu(mut state: ResMut<NextState<UiState>>) {
     state.set(UiState::MainMenu);

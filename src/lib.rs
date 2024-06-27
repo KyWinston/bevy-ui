@@ -1,5 +1,8 @@
 use bevy::prelude::*;
 use bevy_lunex::UiPlugin;
+use bevy_third_person_camera::ThirdPersonCameraPlugin;
+use hud::HudPlugin;
+use loading::LoadingPlugin;
 use main_menu::MainMenuPlugin;
 use resources::GameTitle;
 use splash::SplashPlugin;
@@ -8,8 +11,8 @@ use widgets::button::ButtonPlugin;
 
 
 pub mod components;
-// pub mod hud;
-// pub mod loading;
+pub mod hud;
+pub mod loading;
 pub mod main_menu;
 // pub mod pause;
 pub mod resources;
@@ -32,10 +35,11 @@ impl Plugin for UiScreensPlugin {
                 // PausePlugin,
                 // SettingsPlugin,
                 SplashPlugin,
-                // HudPlugin,
+                HudPlugin,
                 ButtonPlugin,
+                ThirdPersonCameraPlugin,
                 UiPlugin,
-                // LoadingPlugin,
+                LoadingPlugin,
             )).add_systems(Startup, init_ui_cam);
     }
 }
