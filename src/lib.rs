@@ -4,6 +4,7 @@ use bevy_third_person_camera::ThirdPersonCameraPlugin;
 use hud::HudPlugin;
 use loading::LoadingPlugin;
 use main_menu::MainMenuPlugin;
+use pause::PausePlugin;
 use resources::GameTitle;
 use splash::SplashPlugin;
 use systems::init_ui_cam;
@@ -14,7 +15,7 @@ pub mod components;
 pub mod hud;
 pub mod loading;
 pub mod main_menu;
-// pub mod pause;
+pub mod pause;
 pub mod resources;
 // pub mod settings;
 pub mod splash;
@@ -32,7 +33,7 @@ impl Plugin for UiScreensPlugin {
         app.insert_resource(GameTitle(self.title.clone()))
             .add_plugins((
                 MainMenuPlugin,
-                // PausePlugin,
+                PausePlugin,
                 // SettingsPlugin,
                 SplashPlugin,
                 HudPlugin,

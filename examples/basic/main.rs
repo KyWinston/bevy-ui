@@ -1,6 +1,5 @@
 use bevy::prelude::*;
-use bevy_basic_ui::{splash::components::SplashScreen, SimulationState, UiScreensPlugin, UiState};
-use bevy_lunex::prelude::MainUi;
+use bevy_basic_ui::{SimulationState, UiScreensPlugin, UiState};
 
 fn main() {
     App::new()

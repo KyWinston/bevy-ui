@@ -6,7 +6,7 @@ use bevy_lunex::{
 
 use crate::{hud::components::Hud, splash::components::SplashScreen, UiState};
 
-pub fn init_ui_cam(mut commands: Commands, asset_server: Res<AssetServer>) {
+pub fn init_ui_cam(mut commands: Commands) {
     commands
         .spawn((
             Camera2dBundle {
@@ -49,48 +49,6 @@ pub fn init_ui_cam(mut commands: Commands, asset_server: Res<AssetServer>) {
 //             }
 //             Interaction::None => {
 //                 *background_color = NORMAL_BUTTON_COLOR.into();
-//             }
-//         }
-//     }
-// }
-
-// pub fn interact_with_respawn_button(
-//     mut button_q: Query<
-//         (&Interaction, &mut BackgroundColor),
-//         (Changed<Interaction>, With<RespawnButton>),
-//     >,
-//     mut spawn_ev: EventWriter<SpawnEvent>,
-//     mut state: ResMut<NextState<SimulationState>>,
-//     cam_q: Query<&CameraTarget, With<Camera>>,
-//     commands: Commands,
-//     respawn_q: Query<Entity, With<Screen>>,
-//     SimulationState maps: Res<Assets<Map>>,
-//     map: Res<MapHandle>,
-// ) {
-//     if let Ok(cam) = cam_q.get_single() {
-//         if let Some(map) = maps.get(map.0.id()) {
-//             if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
-//                 match *interaction {
-//                     Interaction::Pressed => {
-//                         *background_color = PRESSED_BUTTON_COLOR.into();
-//                         despawn_screens(commands, respawn_q);
-//                         state.set(SimulationState::Running);
-//                         spawn_ev.send(SpawnEvent {
-//                             player_number: cam.target,
-//                             transform: Vec3 {
-//                                 x: 5.0,
-//                                 y: map.map_height as f32 * 2.0 + 1.0,
-//                                 z: 0.0,
-//                             },
-//                         });
-//                     }
-//                     Interaction::Hovered => {
-//                         *background_color = HOVERED_BUTTON_COLOR.into();
-//                     }
-//                     Interaction::None => {
-//                         *background_color = NORMAL_BUTTON_COLOR.into();
-//                     }
-//                 }
 //             }
 //         }
 //     }

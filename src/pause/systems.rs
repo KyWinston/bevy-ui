@@ -1,112 +1,143 @@
 use bevy::prelude::*;
-
-use crate::{
-    components::{BasicButtonBundle, ButtonTextBundle, QuitButton, Screen},
-    styles::*,
-    systems::despawn_screens,
-    SimulationState,
+use bevy::{
+    color::palettes::css::{BLANCHED_ALMOND, OLIVE_DRAB},
+    prelude::EventReader,
+    sprite::Anchor,
+};
+use bevy_lunex::{
+    prelude::{Ab, MainUi, Pickable, Rl, UiNodeTreeInitTrait, UiTree},
+    Base, MovableByCamera, OnUiClickDespawn, PackageLayout, UiClickEvent, UiImage2dBundle,
+    UiLayout, UiLink, UiText2dBundle, UiTreeBundle,
 };
 
-use super::components::{Pause, ResumeButton};
+use crate::styles::get_title_text_styles;
+use crate::{widgets::button::components::CustomButton, SimulationState};
 
-pub fn interact_with_resume_button(
-    commands: Commands,
-    mut button_q: Query<
-        (&Interaction, &mut BackgroundColor),
-        (Changed<Interaction>, With<ResumeButton>),
-    >,
-    pause_q: Query<Entity, With<Screen>>,
+use super::components::{Pause, PauseButton};
+
+pub fn interact_with_pause_button(
+    mut events: EventReader<UiClickEvent>,
     mut state: ResMut<NextState<SimulationState>>,
+    button_q: Query<&PauseButton>,
 ) {
-    if let Ok((interaction, mut background_color)) = button_q.get_single_mut() {
-        match *interaction {
-            Interaction::Pressed => {
-                *background_color = PRESSED_BUTTON_COLOR.into();
-                despawn_screens(commands, pause_q);
-                state.set(SimulationState::Running);
-            }
-            Interaction::Hovered => {
-                *background_color = HOVERED_BUTTON_COLOR.into();
-            }
-            Interaction::None => {
-                *background_color = NORMAL_BUTTON_COLOR.into();
-            }
+    for event in events.read() {
+        if let Ok(p_btn) = button_q.get(event.target) {
+            match p_btn {
+                PauseButton::Resume => {
+                    state.set(SimulationState::Running);
+                }
+                // PauseButton::Menu => {
+                //     app_exit_event_writer.send(AppExit::Success);
+                // }
+                _ => (),
+            };
         }
     }
-}
-
-pub fn spawn_pause(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    cam_q: Query<(Entity, &Camera)>,
-) {
-    build_pause(&mut commands, &asset_server, &cam_q);
 }
 
 pub fn build_pause(
-    commands: &mut Commands,
-    asset_server: &Res<AssetServer>,
-    cam_q: &Query<(Entity, &Camera)>,
-) -> Entity {
-    let pause_entity = commands
-        .spawn((
-            NodeBundle {
-                style: CENTRAL_PANEL_STYLES,
-                ..default()
-            },
-            Pause,
-            Screen,
-        ))
-        .with_children(|parent| {
-            //====title
-            parent
-                .spawn(NodeBundle {
-                    style: TITLE_STYLE,
-                    ..default()
-                })
-                .with_children(|parent| {
-                    // Image 1
-                    parent.spawn(ImageBundle {
-                        style: IMAGE_STYLE,
-                        image: asset_server.load("images/tile_0003.png").into(),
-                        ..default()
-                    });
-                    //Text
-                    parent.spawn(TextBundle {
-                        text: Text {
-                            sections: vec![TextSection::new(
-                                "Paused",
-                                get_title_text_styles(&asset_server),
-                            )],
-                            ..default()
-                        },
-                        ..default()
-                    });
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    query: Query<Entity, Added<Pause>>,
+) {
+    for route_entity in &query {
+        commands
+            .entity(route_entity)
+            .insert(SpatialBundle::default())
+            .with_children(|route| {
+                route
+                    .spawn((
+                        UiTreeBundle::<MainUi>::from(UiTree::new("Pause")),
+                        MovableByCamera,
+                    ))
+                    .with_children(|ui| {
+                        let root = UiLink::<MainUi>::path("Root"); // Here we can define the name of the node
+                        ui.spawn((root.clone(), UiLayout::window_full().pack::<Base>()));
+                        ui.spawn((
+                            root.add("Background"),
+                            UiLayout::solid()
+                                .size((2968.0, 1656.0))
+                                .scaling(bevy_lunex::prelude::Scaling::Fill)
+                                .pack::<Base>(),
+                            Pickable::IGNORE,
+                        ));
 
-                    parent.spawn(ImageBundle {
-                        style: IMAGE_STYLE,
-                        image: asset_server.load("images/tile_0003.png").into(),
-                        ..default()
+                        let panel: UiLink = root.add("Panel");
+                        ui.spawn((
+                            panel.clone(),
+                            UiLayout::window()
+                                .size(Rl((50.0, 70.0)))
+                                .pos(Rl(50.0))
+                                .anchor(Anchor::Center)
+                                .pack::<Base>(),
+                            Pickable::IGNORE,
+                        ));
+                        let heading: UiLink = panel.add("Heading");
+                        ui.spawn((
+                            heading.clone(),
+                            UiLayout::window().pos(Rl((15.0, 5.0))).pack::<Base>(),
+                            UiText2dBundle {
+                                text: Text::from_section(
+                                    "Paused",
+                                    get_title_text_styles(&asset_server),
+                                ),
+                                text_anchor: Anchor::Center,
+                                ..default()
+                            },
+                            Pickable::IGNORE,
+                        ));
+
+                        let list = panel.add("List");
+                        ui.spawn((
+                            list.clone(),
+                            UiLayout::window()
+                                .pos((Rl(20.0), Rl(40.0)))
+                                .size(Rl(60.0))
+                                .pack::<Base>(),
+                            Pickable::IGNORE,
+                        ));
+
+                        // Spawn buttons
+                        let gap = 2.0;
+                        let size = 40.0;
+                        let mut offset = 0.0;
+                        for button in [
+                            PauseButton::Resume,
+                            PauseButton::Settings,
+                            PauseButton::Menu,
+                        ] {
+                            let mut btn = ui.spawn((
+                                list.add(button.str()),
+                                button.clone(),
+                                UiImage2dBundle {
+                                    sprite: Sprite {
+                                        color: Color::srgb_from_array(
+                                            BLANCHED_ALMOND.to_f32_array_no_alpha(),
+                                        ),
+                                        ..default()
+                                    },
+                                    ..default()
+                                },
+                                UiLayout::window()
+                                    .y(Rl(offset))
+                                    .size((Rl(100.0), Ab(size)))
+                                    .pack::<Base>(),
+                                CustomButton {
+                                    text: button.str(),
+                                    texture: asset_server.load("tile_0003.png"),
+                                    color: OLIVE_DRAB.into(),
+                                },
+                            ));
+                            btn.insert((Pickable::IGNORE, OnUiClickDespawn::new(route_entity)));
+                            offset += gap + size;
+                        }
                     });
-                });
-            //====play button
-            parent
-                .spawn((BasicButtonBundle::new(), ResumeButton))
-                .with_children(|parent| {
-                    parent.spawn(ButtonTextBundle::new("Resume".to_owned(), asset_server));
-                });
-            //====quit button
-            parent
-                .spawn((BasicButtonBundle::new(), QuitButton))
-                .with_children(|parent| {
-                    parent.spawn(ButtonTextBundle::new("Quit".to_owned(), asset_server));
-                });
-        })
-        .id();
-    for (ent, cam) in cam_q.iter() {
-        if cam.is_active {
-            commands.entity(pause_entity).insert(TargetCamera(ent));
-        }
+            });
     }
-    pause_entity
+}
+
+pub fn despawn_pause(mut commands: Commands, query: Query<Entity, Added<Pause>>) {
+    for ent in &query {
+        commands.entity(ent).despawn_recursive();
+    }
 }

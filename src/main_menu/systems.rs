@@ -1,9 +1,6 @@
 use bevy::{
     color::palettes::css::{BLANCHED_ALMOND, OLIVE_DRAB},
     prelude::*,
-    render::render_resource::{
-        Extent3d, TextureDescriptor, TextureDimension, TextureFormat, TextureUsages,
-    },
     sprite::Anchor,
 };
 use bevy_lunex::{
@@ -12,10 +9,7 @@ use bevy_lunex::{
     UiLayout, UiLink, UiText2dBundle, UiTreeBundle,
 };
 
-use crate::{
-    components::Screen, hud::components::Hud, resources::GameTitle, styles::*,
-    widgets::button::components::CustomButton,
-};
+use crate::{resources::GameTitle, styles::*, widgets::button::components::CustomButton};
 
 use super::{
     components::{MainMenu, MainMenuButton},
@@ -62,10 +56,7 @@ pub fn build_main_menu(
                     .with_children(|ui| {
                         let root = UiLink::<MainUi>::path("Root"); // Here we can define the name of the node
                         ui.spawn((
-                            // Link the entity
                             root.clone(),
-                            // Specify UI layout
-                            Screen,
                             MainMenu,
                             UiLayout::window_full().pack::<Base>(),
                         ));

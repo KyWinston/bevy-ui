@@ -83,7 +83,7 @@ pub fn build_hud(
                         aim_zoom: 0.7,
                         zoom_enabled: true,
                         zoom: Zoom::new(5.5, 10.0),
-                        // sensitivity: Vec2::new(settings.0[0].value as f32, settings.0[1].value as f32),
+                        sensitivity: Vec2::new(15.0, 15.0),
                         ..default()
                     },
                 ));
