@@ -124,7 +124,8 @@ pub fn build_pause(
                                     .pack::<Base>(),
                                 CustomButton {
                                     text: button.str(),
-                                    texture: asset_server.load("tile_0003.png"),
+                                    texture: asset_server
+                                        .load("images/ui/metalPanel_greenCorner.png"),
                                     color: OLIVE_DRAB.into(),
                                 },
                             ));

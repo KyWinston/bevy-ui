@@ -1,9 +1,10 @@
 use bevy::{prelude::*, sprite::Anchor};
 use bevy_lunex::prelude::*;
 
-use crate::styles::get_button_text_styles;
-
-use super::components::{CustomButton, CustomButtonUi};
+use super::{
+    components::{CustomButton, CustomButtonUi},
+    styles::get_button_text_styles,
+};
 
 pub fn build_button(
     mut commands: Commands,
@@ -38,7 +39,9 @@ pub fn build_button(
                     UiColor::<Base>::new(button.color.into()),
                     UiColor::<Hover>::new(button.color.lighter(0.3).into()),
                     OnHoverSetCursor::new(CursorIcon::Pointer),
-                    UiClickEmitter { target: Some(entity) },
+                    UiClickEmitter {
+                        target: Some(entity),
+                    },
                 ));
                 ui.spawn((
                     UiLink::<CustomButtonUi>::path("Button/Buttontext"),

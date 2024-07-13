@@ -5,43 +5,22 @@ use bevy::{
 };
 use bevy_lunex::{
     prelude::{Ab, MainUi, Pickable, Rl, UiNodeTreeInitTrait, UiTree},
-    Base, MovableByCamera, OnUiClickDespawn, PackageLayout, UiClickEvent, UiImage2dBundle,
+    Base, MovableByCamera, OnUiClickCommands, OnUiClickDespawn, PackageLayout, UiImage2dBundle,
     UiLayout, UiLink, UiText2dBundle, UiTreeBundle,
 };
 
-use crate::{resources::GameTitle, styles::*, widgets::button::components::CustomButton};
-
-use super::{
-    components::{MainMenu, MainMenuButton},
-    events::StartLoad,
+use crate::{
+    components::Quit, loading::components::Loading, resources::GameTitle,
+    styles::*, widgets::button::components::CustomButton,
 };
 
-pub fn interact_with_menu_button(
-    mut events: EventReader<UiClickEvent>,
-    mut load_ev: EventWriter<StartLoad>,
-    mut app_exit_event_writer: EventWriter<AppExit>,
-    button_q: Query<&MainMenuButton>,
-) {
-    for event in events.read() {
-        if let Ok(mm_btn) = button_q.get(event.target) {
-            match mm_btn {
-                MainMenuButton::NewGame => {
-                    load_ev.send(StartLoad);
-                }
-                MainMenuButton::QuitGame => {
-                    app_exit_event_writer.send(AppExit::Success);
-                }
-                _ => (),
-            };
-        }
-    }
-}
+use super::components::{MainMenu, MainMenuButton};
 
 pub fn build_main_menu(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     query: Query<Entity, Added<MainMenu>>,
-    _title: Res<GameTitle>,
+    title: Res<GameTitle>,
 ) {
     for route_entity in &query {
         commands
@@ -55,11 +34,7 @@ pub fn build_main_menu(
                     ))
                     .with_children(|ui| {
                         let root = UiLink::<MainUi>::path("Root"); // Here we can define the name of the node
-                        ui.spawn((
-                            root.clone(),
-                            MainMenu,
-                            UiLayout::window_full().pack::<Base>(),
-                        ));
+                        ui.spawn((root.clone(), UiLayout::window_full().pack::<Base>()));
                         ui.spawn((
                             root.add("Background"),
                             UiLayout::solid()
@@ -86,7 +61,7 @@ pub fn build_main_menu(
                             UiLayout::window().pos(Rl(5.0)).pack::<Base>(),
                             UiText2dBundle {
                                 text: Text::from_section(
-                                    "Dreamlighters",
+                                    title.0.as_str(),
                                     get_title_text_styles(&asset_server),
                                 ),
                                 text_anchor: Anchor::Center,
@@ -136,11 +111,25 @@ pub fn build_main_menu(
                                     .pack::<Base>(),
                                 CustomButton {
                                     text: button.str(),
-                                    texture: asset_server.load("tile_0003.png"),
+                                    texture: asset_server.load("images/ui/metalPanel.png"),
                                     color: OLIVE_DRAB.into(),
                                 },
                             ));
-                            btn.insert((Pickable::IGNORE, OnUiClickDespawn::new(route_entity)));
+                            if button == MainMenuButton::NewGame {
+                                btn.insert((
+                                    OnUiClickDespawn::new(route_entity),
+                                    OnUiClickCommands::new(|commands| {
+                                        commands.spawn(Loading(Some("Loading...".to_string())));
+                                    }),
+                                ));
+                            } else if button == MainMenuButton::QuitGame {
+                                btn.insert((
+                                    OnUiClickDespawn::new(route_entity),
+                                    OnUiClickCommands::new(|commands| {
+                                        commands.spawn(Quit);
+                                    }),
+                                ));
+                            }
                             offset += gap + size;
                         }
                     });

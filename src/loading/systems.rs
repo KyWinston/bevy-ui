@@ -1,6 +1,6 @@
-use bevy::{color::palettes::css::BLACK, prelude::*};
+use bevy::{color::palettes::css::BLACK, prelude::*, sprite::Anchor};
 use bevy_lunex::{
-    prelude::{MainUi, Pickable, UiNodeTreeInitTrait, UiTree},
+    prelude::{MainUi, Pickable, Rl, UiNodeTreeInitTrait, UiTree},
     Base, MovableByCamera, PackageLayout, UiColor, UiLayout, UiLink, UiText2dBundle, UiTreeBundle,
 };
 
@@ -9,9 +9,9 @@ use super::{components::Loading, styles::get_loading_text_styles};
 pub fn build_loading(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    query: Query<Entity, Added<Loading>>,
+    query: Query<(Entity, &Loading), Added<Loading>>,
 ) {
-    for route_entity in &query {
+    for (route_entity, load_text) in &query {
         commands
             .entity(route_entity)
             .insert(SpatialBundle::default())
@@ -22,36 +22,36 @@ pub fn build_loading(
                         MovableByCamera,
                     ))
                     .with_children(|ui| {
-                        let loading_text = "Loading...".to_string();
                         let root = UiLink::<MainUi>::path("Root"); // Here we can define the name of the node
                         ui.spawn((
                             root.clone(),
-                            Loading(Some(loading_text.clone())),
-                            UiLayout::window_full().pack::<Base>(),
-                        ));
-                        ui.spawn((
-                            root.add("Background"),
                             UiLayout::solid()
                                 .size((2968.0, 1656.0))
                                 .scaling(bevy_lunex::prelude::Scaling::Fill)
                                 .pack::<Base>(),
+                        ));
+                        ui.spawn((
+                            root.add("Background"),
+                            UiLayout::window()
+                                .size(Rl((100.0, 10.0)))
+                                .pos(Rl((80.0, 90.0)))
+                                .pack::<Base>(),
                             UiColor::<Base>::new(Color::Srgba(BLACK.into())),
                             Pickable::IGNORE,
+                        ));
+                        ui.spawn((
+                            root.add("Background/Messege"),
+                            UiLayout::window().pack::<Base>(),
                             UiText2dBundle {
                                 text: Text::from_section(
-                                    loading_text,
+                                    load_text.0.as_ref().unwrap().to_string(),
                                     get_loading_text_styles(&asset_server),
                                 ),
+                                text_anchor: Anchor::BottomRight,
                                 ..default()
                             },
                         ));
                     });
             });
-    }
-}
-
-pub fn despawn_loading(mut commands: Commands, loading: Query<Entity, With<Loading>>) {
-    for entity in &loading {
-        commands.entity(entity).despawn_recursive();
     }
 }

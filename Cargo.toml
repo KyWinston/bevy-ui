@@ -2,7 +2,6 @@
 name = "bevy-basic-ui"
 version = "0.4.13"
 description = "A small manager for menus and huds"
-authors.workspace = true
 repository = "https://github.com/KyleWinston/bevy-ui"
 license = "MIT OR Apache-2.0"
 edition = "2021"
@@ -12,19 +11,19 @@ keywords = ["bevy", "menus", "ui"]
 # exclude = ["/examples"]
 
 [dependencies]
-serde.workspace = true
-bevy = { workspace = true, default-features = false, features = [
+serde = "1.0.99"
+bevy = { version = "0.14.0", default-features = false, features = [
     "bevy_core_pipeline",
     "bevy_sprite",
     "bevy_state",
     "bevy_winit",
     "multi_threaded",
-    "vorbis",
     "bevy_text",
+    # "default_font",
     "png",
-    "x11"
 ] }
-bevy_third_person_camera.workspace = true
-bevy_common_assets = { version = "0.10.0", features = ["toml"] }
+bevy-settings = "0.6.0"
+bevy_third_person_camera = "0.1.11"
+bevy_common_assets = { version = "0.11.0", features = ["toml"] }
 async-executor = "1.12.0"
-bevy_lunex = { git = "https://github.com/bytestring-net/bevy_lunex", branch = "dev" }
+bevy_lunex = "0.2.0"

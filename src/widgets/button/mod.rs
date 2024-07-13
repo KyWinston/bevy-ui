@@ -5,6 +5,7 @@ use systems::build_button;
 
 pub mod components;
 pub mod systems;
+pub mod styles;
 
 #[derive(Clone)]
 pub struct ButtonPlugin;

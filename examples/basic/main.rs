@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_basic_ui::{SimulationState, UiScreensPlugin, UiState};
+use bevy_basic_ui::prelude::*;
 
 fn main() {
     App::new()
