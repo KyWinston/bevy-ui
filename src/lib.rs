@@ -1,4 +1,4 @@
-use bevy::{prelude::*, render::texture::ImageFilterMode};
+use bevy::prelude::*;
 use bevy_lunex::{UiGenericPlugin, UiPlugin};
 use bevy_third_person_camera::ThirdPersonCameraPlugin;
 use components::Ui3d;
