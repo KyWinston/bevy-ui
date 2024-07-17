@@ -1,138 +1,105 @@
-use bevy::{
-    color::palettes::css::{BLANCHED_ALMOND, OLIVE_DRAB},
-    prelude::*,
-    sprite::Anchor,
-};
+use bevy::{color::palettes::css::BLACK, prelude::*, window::PrimaryWindow};
+
 use bevy_lunex::{
-    prelude::{Ab, MainUi, Pickable, Rl, UiNodeTreeInitTrait, UiTree},
-    Base, MovableByCamera, OnUiClickCommands, OnUiClickDespawn, PackageLayout, UiImage2dBundle,
-    UiLayout, UiLink, UiText2dBundle, UiTreeBundle,
+    prelude::{MainUi, Pickable, Rl, UiNodeTreeInitTrait, UiTree},
+    Base, MovableByCamera, PackageLayout, UiClickEvent, UiImage2dBundle, UiLayout, UiLink,
+    UiTreeBundle,
 };
 
 use crate::{
-    components::Quit, loading::components::Loading, resources::GameTitle,
-    styles::*, widgets::button::components::CustomButton,
+    loading::components::Loading,
+    main_menu::components::MainMenuButton,
+    resources::GameTitle,
+    widgets::{
+        button::components::{CustomButton, CustomButtonRef},
+        panel::components::Panel,
+    },
 };
 
-use super::components::{MainMenu, MainMenuButton};
+use super::components::MainMenu;
 
 pub fn build_main_menu(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     query: Query<Entity, Added<MainMenu>>,
+    window: Query<&Window, With<PrimaryWindow>>,
     title: Res<GameTitle>,
 ) {
     for route_entity in &query {
-        commands
-            .entity(route_entity)
-            .insert(SpatialBundle::default())
-            .with_children(|route| {
-                route
-                    .spawn((
-                        UiTreeBundle::<MainUi>::from(UiTree::new("MainMenu")),
-                        MovableByCamera,
-                    ))
-                    .with_children(|ui| {
-                        let root = UiLink::<MainUi>::path("Root"); // Here we can define the name of the node
-                        ui.spawn((root.clone(), UiLayout::window_full().pack::<Base>()));
-                        ui.spawn((
-                            root.add("Background"),
-                            UiLayout::solid()
-                                .size((2968.0, 1656.0))
-                                .scaling(bevy_lunex::prelude::Scaling::Fill)
-                                .pack::<Base>(),
-                            Pickable::IGNORE,
-                            UiImage2dBundle::from(asset_server.load("Level_base_diffuse.png")),
-                        ));
+        if let Ok(resolution) = window.get_single() {
+            let r_size = (resolution.width(), resolution.height());
+            commands
+                .entity(route_entity)
+                .insert(SpatialBundle::default())
+                .with_children(|route| {
+                    route
+                        .spawn((
+                            UiTreeBundle::<MainUi>::from(UiTree::new("MainMenu")),
+                            MovableByCamera,
+                        ))
+                        .with_children(|ui| {
+                            let root = UiLink::<MainUi>::path("Root");
+                            ui.spawn((
+                                root.clone(),
+                                UiLayout::window().size(r_size).pack::<Base>(),
+                            ));
+                            let background = root.add("Background");
 
-                        let panel: UiLink = root.add("Panel");
-                        ui.spawn((
-                            panel.clone(),
-                            UiLayout::window()
-                                .size(Rl((55.0, 70.0)))
-                                .pos(Rl((40.0, 50.0)))
-                                .anchor(Anchor::Center)
-                                .pack::<Base>(),
-                            Pickable::IGNORE,
-                        ));
-                        let heading: UiLink = panel.add("Heading");
-                        ui.spawn((
-                            heading.clone(),
-                            UiLayout::window().pos(Rl(5.0)).pack::<Base>(),
-                            UiText2dBundle {
-                                text: Text::from_section(
-                                    title.0.as_str(),
-                                    get_title_text_styles(&asset_server),
-                                ),
-                                text_anchor: Anchor::Center,
-                                ..default()
-                            },
-                            Pickable::IGNORE,
-                        ));
-
-                        let list = panel.add("List");
-                        ui.spawn((
-                            list.clone(),
-                            UiLayout::window()
-                                .pos((Rl(20.0), Rl(40.0)))
-                                .size(Rl(60.0))
-                                .pack::<Base>(),
-                            Pickable::IGNORE,
-                        ));
-
-                        // Spawn buttons
-                        let gap = 2.0;
-                        let size = 40.0;
-                        let mut offset = 0.0;
-                        for button in [
-                            // MainMenuButton::Continue,
-                            MainMenuButton::NewGame,
-                            // MainMenuButton::LoadGame,
-                            MainMenuButton::Settings,
-                            // MainMenuButton::AdditionalContent,
-                            // MainMenuButton::Credits,
-                            MainMenuButton::QuitGame,
-                        ] {
-                            let mut btn = ui.spawn((
-                                list.add(button.str()),
-                                button.clone(),
-                                UiImage2dBundle {
-                                    sprite: Sprite {
-                                        color: Color::srgb_from_array(
-                                            BLANCHED_ALMOND.to_f32_array_no_alpha(),
-                                        ),
-                                        ..default()
-                                    },
+                            ui.spawn((
+                                background.clone(),
+                                UiLayout::window_full().pack::<Base>(),
+                                Pickable::IGNORE,
+                                UiImage2dBundle::from(asset_server.load("Level_base_diffuse.png")),
+                            ));
+                            let content = vec![
+                                CustomButtonRef {
+                                    link: MainMenuButton::NewGame.str(),
+                                },
+                                CustomButtonRef {
+                                    link: MainMenuButton::Settings.str(),
+                                },
+                                CustomButtonRef {
+                                    link: MainMenuButton::QuitGame.str(),
+                                },
+                            ];
+                            ui.spawn((
+                                background.add("Panel"),
+                                UiLayout::window()
+                                    .size(Rl((40.0, 80.0)))
+                                    .pos(Rl((10.0, 10.0)))
+                                    .pack::<Base>(),
+                                Panel {
+                                    text: Some(title.0.to_string()),
+                                    color: BLACK.into(),
+                                    content,
                                     ..default()
                                 },
-                                UiLayout::window()
-                                    .y(Rl(offset))
-                                    .size((Rl(100.0), Ab(size)))
-                                    .pack::<Base>(),
-                                CustomButton {
-                                    text: button.str(),
-                                    texture: asset_server.load("images/ui/metalPanel.png"),
-                                    color: OLIVE_DRAB.into(),
-                                },
+                                Pickable::IGNORE,
                             ));
-                            if button == MainMenuButton::NewGame {
-                                btn.insert((
-                                    OnUiClickDespawn::new(route_entity),
-                                    OnUiClickCommands::new(|commands| {
-                                        commands.spawn(Loading(Some("Loading...".to_string())));
-                                    }),
-                                ));
-                            } else if button == MainMenuButton::QuitGame {
-                                btn.insert((
-                                    OnUiClickDespawn::new(route_entity),
-                                    OnUiClickCommands::new(|commands| {
-                                        commands.spawn(Quit);
-                                    }),
-                                ));
-                            }
-                            offset += gap + size;
-                        }
-                    });
-            });
+                        });
+                });
+        }
+    }
+}
+
+pub fn main_menu_button_clicked_system(
+    mut commands: Commands,
+    mut events: EventReader<UiClickEvent>,
+    query: Query<&CustomButton>,
+    menu_q: Query<Entity, With<MainMenu>>,
+    mut exit: EventWriter<bevy::app::AppExit>,
+) {
+    for event in events.read() {
+        if let Ok(ent) = menu_q.get_single() {
+            if let Ok(button) = query.get(event.target) {
+                if button.text == MainMenuButton::NewGame.str() {
+                    commands.entity(ent).despawn_recursive();
+                    commands.spawn(Loading(Some("Loading...".to_string())));
+                } else if button.text == MainMenuButton::QuitGame.str() {
+                    commands.entity(event.target).despawn_recursive();
+                    exit.send(bevy::app::AppExit::Success);
+                }
+            }
+        }
     }
 }

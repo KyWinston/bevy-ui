@@ -1,11 +1,7 @@
 use bevy::{color::palettes::css::BLACK, prelude::*};
 
-pub const TITLE_FONT: f32 = 20.0;
+pub const TITLE_FONT: f32 = 15.0;
 pub const BASE_FONT: f32 = 10.0;
-
-// pub const NORMAL_BUTTON_COLOR: Srgba = STEEL_BLUE;
-// pub const HOVERED_BUTTON_COLOR: Srgba = BLUE_100;
-// pub const PRESSED_BUTTON_COLOR: Srgba = BLUE_200;
 
 pub fn get_title_text_styles(asset_server: &Res<AssetServer>) -> TextStyle {
     TextStyle {

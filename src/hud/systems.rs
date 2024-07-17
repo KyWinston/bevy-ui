@@ -12,9 +12,7 @@ use bevy_lunex::{
     Base, MovableByCamera, PackageLayout, PickingPortal, UiImage2dBundle, UiLayout, UiLink,
     UiTreeBundle,
 };
-use bevy_third_person_camera::{
-    ThirdPersonCamera, {Offset, Zoom},
-};
+use bevy_third_person_camera::{ThirdPersonCamera, Zoom};
 
 use super::components::{Hud, UiDisplay};
 use crate::components::MainCam;
@@ -22,14 +20,17 @@ use crate::components::MainCam;
 pub fn build_hud(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    primary_window: Query<(Entity, &Window), With<PrimaryWindow>>,
+    primary_window: Query<&Window, With<PrimaryWindow>>,
     query: Query<Entity, Added<Hud>>,
 ) {
     for route_entity in &query {
         if let Ok(window) = primary_window.get_single() {
+            let (env_pth, env_suffix) = ("images/environment_maps/pisa_", "_rgb9e5_zstd.ktx2");
+            let resolution = &window.resolution;
+            let w_size = (resolution.width(), resolution.height());
             let size = Extent3d {
-                width: window.1.resolution.width() as u32,
-                height: window.1.resolution.height() as u32,
+                width: w_size.0 as u32,
+                height: w_size.1 as u32,
                 ..default()
             };
 
@@ -66,9 +67,7 @@ pub fn build_hud(
                                     camera: Camera {
                                         order: -1,
                                         target: render_image.clone().into(),
-                                        clear_color: ClearColorConfig::Custom(Color::srgba(
-                                            0.0, 0.0, 0.0, 0.0,
-                                        )),
+                                        clear_color: ClearColorConfig::Default,
                                         ..default()
                                     },
                                     projection: Projection::Perspective(PerspectiveProjection {
@@ -79,35 +78,29 @@ pub fn build_hud(
                                 },
                                 VisibilityBundle::default(),
                                 ThirdPersonCamera {
-                                    cursor_lock_active: true,
                                     aim_enabled: true,
                                     aim_speed: 6.0,
-                                    offset_enabled: true,
-                                    offset: Offset::new(1., 1.),
                                     aim_zoom: 0.7,
-                                    zoom_enabled: true,
                                     zoom: Zoom::new(5.5, 10.0),
-                                    sensitivity: Vec2::new(4.0, 4.0),
+                                    sensitivity: Vec2::splat(4.0),
                                     ..default()
                                 },
                                 ScreenSpaceReflectionsBundle::default(),
                                 Fxaa::default(),
                                 EnvironmentMapLight {
-                                    diffuse_map: asset_server.load(
-                                        "images/environment_maps/pisa_diffuse_rgb9e5_zstd.ktx2",
-                                    ),
-                                    specular_map: asset_server.load(
-                                        "images/environment_maps/pisa_specular_rgb9e5_zstd.ktx2",
-                                    ),
+                                    diffuse_map: asset_server
+                                        .load(env_pth.to_string() + "diffuse" + env_suffix),
+                                    specular_map: asset_server
+                                        .load(env_pth.to_string() + "specular" + env_suffix),
                                     intensity: 400.0,
                                 },
                             ));
                         });
-
                     // Spawn the background
                     route
                         .spawn((
                             UiTreeBundle::<MainUi>::from(UiTree::new("HUD")),
+                            UiLayout::window().size(Rl(w_size)).pack::<Base>(),
                             MovableByCamera,
                             UiDisplay,
                         ))
@@ -115,7 +108,7 @@ pub fn build_hud(
                             // Spawn 3D camera view
                             ui.spawn((
                                 UiLink::<MainUi>::path("Camera"),
-                                UiLayout::window_full().pack::<Base>(), // Make this resizable
+                                UiLayout::window().size(Rl(100.0)).pack::<Base>(), // Make this resizable
                                 UiImage2dBundle::from(render_image),
                                 PickingPortal,
                             ));

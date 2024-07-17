@@ -1,9 +1,10 @@
-use bevy::{prelude::*, sprite::Anchor};
+use bevy::prelude::*;
 use bevy_lunex::prelude::*;
 
+use crate::widgets::list::components::List;
+
 use super::{
-    components::{Panel, PanelText, PanelUi},
-    events::PanelUpdateEvent,
+    components::{Panel, PanelUi},
     styles::get_panel_text_styles,
 };
 
@@ -15,62 +16,59 @@ pub fn build_panel(
     for (entity, panel) in &query {
         commands
             .entity(entity)
-            .insert(UiTreeBundle::<PanelUi>::from(UiTree::new("Panel")))
+            .insert((UiTreeBundle::<PanelUi>::from(UiTree::new("Panel")),))
             .with_children(|ui| {
-                ui.spawn((
-                    UiLink::<PanelUi>::path("Panel"),
-                    UiImage2dBundle {
-                        texture: panel.texture.clone(),
-                        sprite: Sprite {
-                            color: Color::Srgba(panel.color.into()),
+                let panel_link = UiLink::<PanelUi>::path("Panel");
+                let mut panel_bundle = ui.spawn((
+                    panel_link.clone(),
+                    UiLayout::window_full().pack::<Base>(),
+                    Pickable::IGNORE,
+                    UiColor::<Base>::new(panel.color.into()),
+                ));
+                if panel.texture.is_some() {
+                    panel_bundle.insert((
+                        ImageScaleMode::Sliced(TextureSlicer {
+                            border: BorderRect::rectangle(10.0, 10.0),
+                            ..default()
+                        }),
+                        UiImage2dBundle {
+                            texture: panel.texture.as_ref().unwrap().clone(),
+                            sprite: Sprite {
+                                color: Color::Srgba(panel.color.into()),
+                                ..default()
+                            },
                             ..default()
                         },
-                        ..default()
-                    },
-                    UiLayout::window_full()
-                        .anchor(Anchor::Center)
-                        .pack::<Base>(),
-                    ImageScaleMode::Sliced(TextureSlicer {
-                        border: BorderRect::rectangle(10.0, 10.0),
-                        ..default()
-                    }),
-                    UiColor::<Base>::new(panel.color.into()),
-                    Pickable::IGNORE,
-                ));
+                    ));
+                }
                 ui.spawn((
-                    UiLink::<PanelUi>::path("Panel/PanelText"),
-                    UiLayout::window_full()
-                        .anchor(Anchor::Center)
-                        .pos(Rl(50.0))
-                        .pack::<Base>(),
+                    panel_link.add("Heading"),
+                    UiLayout::window().pack::<Base>(),
+                    UiTextSize::new().size(Rh(13.0)),
                     UiText2dBundle {
                         text: Text::from_section(
-                            panel.text.to_string(),
+                            panel.text.clone().unwrap(),
                             get_panel_text_styles(&assets),
                         ),
                         ..default()
                     },
-                    PanelText,
                     Pickable::IGNORE,
                 ));
-            });
-    }
-}
-
-pub fn update_panel(
-    mut panel_ev: EventReader<PanelUpdateEvent>,
-    mut panel_q: Query<(&Children, &Panel), With<Panel>>,
-    mut p_text: Query<&mut Text, With<PanelText>>,
-) {
-    for ev in panel_ev.read() {
-        for (children, panel) in panel_q.iter_mut() {
-            for child in children.iter() {
-                if let Ok(mut ptext) = p_text.get_mut(*child) {
-                    if panel.label == ev.0 {
-                        ptext.sections[0].value = ev.1.clone();
-                    }
+                let mut buttons = vec![];
+                for btn in &panel.content {
+                    buttons.push(btn.link.to_string())
                 }
-            }
-        }
+                ui.spawn((
+                    panel_link.add("List"),
+                    UiLayout::window()
+                        .size(Rl((80.0, 87.0)))
+                        .pos(Rl((10.0, 13.0)))
+                        .pack::<Base>(),
+                    List {
+                        items: buttons.to_vec(),
+                        ..default()
+                    },
+                ));
+            });
     }
 }
