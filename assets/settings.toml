@@ -1,0 +1,10 @@
+categories = [
+     { name = 'control settings', contents = [
+        { tag = "Vertical Mouse Sensitivity", value = 20 },
+        { tag = "Horizontal Mouse Sensitivity", value = 20 },
+    ] },
+    { name = 'hud settings', contents = [
+        { tag = "Hide Hotbar When Unfocused", value = 1 },
+        { tag = "Toggle Sprint", value = 0 },
+    ] }
+]
